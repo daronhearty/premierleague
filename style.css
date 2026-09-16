@@ -1,8 +1,17 @@
+/* =====================================================
+   RESET
+   ===================================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
+
+
+/* =====================================================
+   BODY
+   ===================================================== */
 
 body {
     font-family: Arial, sans-serif;
@@ -11,9 +20,9 @@ body {
 }
 
 
-/* =============================
+/* =====================================================
    HEADER
-   ============================= */
+   ===================================================== */
 
 header {
     background: #37003c;
@@ -24,11 +33,13 @@ header {
 
 header h1 {
     margin-bottom: 20px;
+    font-size: 30px;
 }
 
 nav {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 25px;
     flex-wrap: wrap;
 }
@@ -44,9 +55,9 @@ nav a:hover {
 }
 
 
-/* =============================
+/* =====================================================
    MAIN CONTENT
-   ============================= */
+   ===================================================== */
 
 main {
     max-width: 1000px;
@@ -64,9 +75,9 @@ h2 {
 }
 
 
-/* =============================
+/* =====================================================
    MATCH LIST
-   ============================= */
+   ===================================================== */
 
 .matches {
     display: flex;
@@ -75,19 +86,24 @@ h2 {
 }
 
 
-/* =============================
-   MATCH CARD - DESKTOP
-   ============================= */
+/* =====================================================
+   STANDARD MATCH CARD
+   ===================================================== */
 
 .match {
     background: white;
     border-radius: 10px;
+
     padding: 18px 24px;
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
     display: grid;
-    grid-template-columns: 1fr 140px 1fr;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        140px
+        minmax(0, 1fr);
 
     align-items: center;
 
@@ -95,13 +111,14 @@ h2 {
 }
 
 
-/* =============================
+/* =====================================================
    TEAMS
-   ============================= */
+   ===================================================== */
 
 .team {
     display: flex;
     align-items: center;
+
     gap: 10px;
 
     width: 100%;
@@ -122,6 +139,8 @@ h2 {
 
 .team span {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -141,17 +160,12 @@ h2 {
 }
 
 
-/* =============================
+/* =====================================================
    SCORE
-   ============================= */
+   ===================================================== */
 
 .score {
     width: 100%;
-
-    text-align: center;
-
-    font-size: 20px;
-    font-weight: bold;
 
     display: flex;
     flex-direction: column;
@@ -159,33 +173,49 @@ h2 {
     align-items: center;
     justify-content: center;
 
-    gap: 3px;
+    text-align: center;
+
+    gap: 7px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.score strong {
+    display: block;
+
+    font-size: 20px;
+    line-height: 1;
 }
 
 .score small {
     display: block;
 
-    font-size: 14px;
+    font-size: 12px;
     font-weight: normal;
+
+    line-height: 1.25;
 
     color: #6b7280;
 
-    white-space: nowrap;
+    text-align: center;
+
+    white-space: normal;
 }
 
 
-/* =============================
+/* =====================================================
    LOADING / EMPTY STATES
-   ============================= */
+   ===================================================== */
 
 .loading {
     color: #6b7280;
 }
 
 
-/* =============================
+/* =====================================================
    FOOTER
-   ============================= */
+   ===================================================== */
 
 footer {
     text-align: center;
@@ -197,158 +227,6 @@ footer {
 
 
 /* =====================================================
-   MOBILE
-   ===================================================== */
-
-@media (max-width: 600px) {
-
-    header {
-        padding: 25px 15px;
-    }
-
-    header h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    nav {
-        gap: 15px;
-    }
-
-    nav a {
-        font-size: 15px;
-    }
-
-    main {
-        margin: 25px auto;
-        padding: 0 12px;
-    }
-
-    section {
-        margin-bottom: 30px;
-    }
-
-    h2 {
-        font-size: 22px;
-    }
-
-
-    /* =============================
-       MOBILE MATCH CARD
-       ============================= */
-
-    .match {
-        display: grid;
-
-        /*
-         Home team | Score | Away team
-        */
-        grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr);
-
-        padding: 16px 10px;
-
-        min-height: 82px;
-
-        border-radius: 12px;
-    }
-
-
-    /* =============================
-       MOBILE TEAMS
-       ============================= */
-
-    .team {
-        gap: 6px;
-
-        font-size: 13px;
-
-        min-width: 0;
-    }
-
-    .team img {
-        width: 28px;
-        height: 28px;
-    }
-
-    .team span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-
-    /* Home */
-
-    .home {
-        justify-content: flex-end;
-        text-align: right;
-    }
-
-
-    /* Away */
-
-    .away {
-        justify-content: flex-start;
-        text-align: left;
-    }
-
-
-    /* =============================
-       MOBILE SCORE
-       ============================= */
-
-    .score {
-        font-size: 18px;
-
-        min-width: 70px;
-
-        line-height: 1.2;
-    }
-
-    .score small {
-        font-size: 10px;
-
-        line-height: 1.2;
-
-        white-space: normal;
-
-        max-width: 70px;
-    }
-}
-
-
-/* =====================================================
-   VERY SMALL PHONES
-   ===================================================== */
-
-@media (max-width: 380px) {
-
-    .match {
-        grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr);
-
-        padding: 14px 7px;
-    }
-
-    .team {
-        font-size: 12px;
-    }
-
-    .team img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .score {
-        min-width: 60px;
-        font-size: 17px;
-    }
-
-    .score small {
-        font-size: 9px;
-        max-width: 60px;
-    }
-}
-/* =====================================================
    ARSENAL PAGE
    ===================================================== */
 
@@ -357,18 +235,22 @@ footer {
 }
 
 
-/* =============================
+/* =====================================================
    ARSENAL HEADER
-   ============================= */
+   ===================================================== */
 
 .arsenal-header {
     background: white;
+
     border-radius: 12px;
+
     padding: 25px;
+
     margin-bottom: 35px;
 
     display: flex;
     align-items: center;
+
     gap: 20px;
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -377,11 +259,15 @@ footer {
 .arsenal-crest {
     width: 75px;
     height: 75px;
+
     object-fit: contain;
+
+    flex-shrink: 0;
 }
 
 .arsenal-header h2 {
     margin-bottom: 5px;
+
     font-size: 30px;
 }
 
@@ -390,9 +276,9 @@ footer {
 }
 
 
-/* =============================
-   FEATURE MATCH
-   ============================= */
+/* =====================================================
+   ARSENAL FEATURE MATCH
+   ===================================================== */
 
 .arsenal-feature {
     margin-bottom: 10px;
@@ -400,13 +286,19 @@ footer {
 
 .arsenal-feature-match {
     background: white;
+
     border-radius: 14px;
 
     min-height: 150px;
+
     padding: 25px;
 
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        150px
+        minmax(0, 1fr);
 
     align-items: center;
 
@@ -414,12 +306,13 @@ footer {
 }
 
 
-/* =============================
-   FEATURE TEAMS
-   ============================= */
+/* =====================================================
+   ARSENAL FEATURE TEAMS
+   ===================================================== */
 
 .feature-team {
     display: flex;
+
     align-items: center;
 
     gap: 12px;
@@ -427,16 +320,19 @@ footer {
     min-width: 0;
 
     font-size: 20px;
+
     font-weight: bold;
 }
 
 .feature-team:first-child {
     justify-content: flex-end;
+
     text-align: right;
 }
 
 .feature-team:last-child {
     justify-content: flex-start;
+
     text-align: left;
 }
 
@@ -452,13 +348,22 @@ footer {
     flex-shrink: 0;
 }
 
+.feature-team strong {
+    white-space: nowrap;
 
-/* =============================
-   FEATURE SCORE
-   ============================= */
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   ARSENAL FEATURE SCORE
+   ===================================================== */
 
 .feature-score {
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
@@ -466,16 +371,18 @@ footer {
 
     text-align: center;
 
-    gap: 7px;
+    gap: 8px;
 }
 
 .feature-score strong {
     font-size: 32px;
+
     line-height: 1;
 }
 
 .feature-score span {
     font-size: 13px;
+
     line-height: 1.3;
 
     color: #6b7280;
@@ -485,18 +392,166 @@ footer {
 
 
 /* =====================================================
-   MOBILE ARSENAL PAGE
+   MOBILE
    ===================================================== */
 
 @media (max-width: 600px) {
 
+
+    /* =============================================
+       HEADER
+       ============================================= */
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 24px;
+
+        margin-bottom: 20px;
+    }
+
+    nav {
+        gap: 15px;
+    }
+
+    nav a {
+        font-size: 15px;
+    }
+
+
+    /* =============================================
+       MAIN
+       ============================================= */
+
+    main {
+        margin: 25px auto;
+
+        padding: 0 12px;
+    }
+
+    section {
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+
+    /* =============================================
+       HOME MATCH CARDS
+       ============================================= */
+
+    .match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            90px
+            minmax(0, 1fr);
+
+        padding: 18px 8px;
+
+        min-height: 100px;
+
+        border-radius: 12px;
+    }
+
+
+    /* =============================================
+       HOME TEAMS
+       ============================================= */
+
+    .team {
+        gap: 6px;
+
+        font-size: 13px;
+
+        min-width: 0;
+    }
+
+    .team img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .team span {
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+    .home {
+        justify-content: flex-end;
+
+        text-align: right;
+    }
+
+    .away {
+        justify-content: flex-start;
+
+        text-align: left;
+    }
+
+
+    /* =============================================
+       HOME SCORE
+       ============================================= */
+
+    .match .score {
+        width: 90px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        text-align: center;
+    }
+
+    .match .score strong {
+        font-size: 20px;
+
+        line-height: 1;
+    }
+
+    .match .score small {
+        font-size: 10px;
+
+        line-height: 1.3;
+
+        max-width: 90px;
+
+        text-align: center;
+
+        white-space: normal;
+
+        color: #6b7280;
+    }
+
+
+    /* =============================================
+       ARSENAL HEADER
+       ============================================= */
+
     .arsenal-header {
         padding: 20px;
+
         margin-bottom: 25px;
+
+        gap: 15px;
     }
 
     .arsenal-crest {
         width: 55px;
+
         height: 55px;
     }
 
@@ -505,32 +560,31 @@ footer {
     }
 
 
-    /* =============================
-       NEXT / LATEST MATCH
-       ============================= */
+    /* =============================================
+       ARSENAL FEATURE MATCH
+       ============================================= */
 
     .arsenal-feature-match {
         min-height: 125px;
 
         padding: 18px 8px;
 
-        display: grid;
-
         grid-template-columns:
             minmax(0, 1fr)
-            75px
+            90px
             minmax(0, 1fr);
 
         align-items: center;
     }
 
 
-    /* =============================
-       FEATURE TEAM
-       ============================= */
+    /* =============================================
+       ARSENAL FEATURE TEAMS
+       ============================================= */
 
     .feature-team {
         font-size: 14px;
+
         gap: 6px;
 
         min-width: 0;
@@ -544,135 +598,180 @@ footer {
         max-height: 38px !important;
     }
 
-    .feature-team strong {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 
-
-    /* =============================
-       FEATURE SCORE
-       ============================= */
+    /* =============================================
+       ARSENAL FEATURE SCORE
+       ============================================= */
 
     .feature-score {
-        width: 75px;
+        width: 90px;
 
         gap: 8px;
     }
 
     .feature-score strong {
         font-size: 24px;
+
         line-height: 1;
     }
 
     .feature-score span {
         font-size: 10px;
-        line-height: 1.2;
 
-        white-space: nowrap;
+        line-height: 1.25;
+
+        white-space: normal;
+
+        text-align: center;
     }
 
 
-    /* =============================
-       RECENT RESULT CARDS
-       ============================= */
+    /* =============================================
+       ARSENAL RECENT RESULTS
+       ============================================= */
 
     .arsenal-page .match {
         grid-template-columns:
             minmax(0, 1fr)
-            75px
+            90px
             minmax(0, 1fr);
 
         padding: 16px 8px;
 
-        min-height: 90px;
+        min-height: 95px;
     }
 
     .arsenal-page .team {
         font-size: 13px;
+
         gap: 6px;
     }
 
     .arsenal-page .team img {
         width: 28px;
+
         height: 28px;
     }
 
 
-    /* =============================
-       SCORE + DATE
-       ============================= */
+    /* =============================================
+       ARSENAL RESULT SCORE + DATE
+       ============================================= */
 
     .arsenal-page .score {
-        width: 75px;
-
-        display: flex;
-        flex-direction: column;
-
-        align-items: center;
-        justify-content: center;
+        width: 90px;
 
         gap: 8px;
     }
 
     .arsenal-page .score strong {
         font-size: 19px;
+
         line-height: 1;
     }
 
     .arsenal-page .score small {
-        display: block;
-
-        margin-top: 0;
-
         font-size: 10px;
 
         line-height: 1.25;
 
+        max-width: 90px;
+
         text-align: center;
 
-        white-space: nowrap;
-
-        color: #6b7280;
+        white-space: normal;
     }
 }
 
 
 /* =====================================================
-   VERY SMALL PHONES
+   SMALL PHONES
    ===================================================== */
 
 @media (max-width: 380px) {
 
+
+    /* =============================================
+       HOME MATCH
+       ============================================= */
+
+    .match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            82px
+            minmax(0, 1fr);
+
+        padding: 16px 6px;
+
+        min-height: 98px;
+    }
+
+    .team {
+        font-size: 12px;
+
+        gap: 5px;
+    }
+
+    .team img {
+        width: 27px;
+
+        height: 27px;
+    }
+
+    .match .score {
+        width: 82px;
+
+        gap: 8px;
+    }
+
+    .match .score strong {
+        font-size: 19px;
+    }
+
+    .match .score small {
+        font-size: 9px;
+
+        max-width: 82px;
+    }
+
+
+    /* =============================================
+       ARSENAL FEATURE
+       ============================================= */
+
     .arsenal-feature-match {
         grid-template-columns:
             minmax(0, 1fr)
-            65px
+            82px
             minmax(0, 1fr);
 
         padding-left: 6px;
+
         padding-right: 6px;
     }
 
     .feature-team {
         font-size: 12px;
+
+        gap: 5px;
     }
 
     .feature-team img {
-        width: 32px !important;
-        height: 32px !important;
+        width: 34px !important;
+        height: 34px !important;
 
-        max-width: 32px !important;
-        max-height: 32px !important;
+        max-width: 34px !important;
+        max-height: 34px !important;
     }
 
     .feature-score {
-        width: 65px;
+        width: 82px;
+
+        gap: 7px;
     }
 
     .feature-score strong {
-        font-size: 21px;
+        font-size: 22px;
     }
 
     .feature-score span {
@@ -680,15 +779,19 @@ footer {
     }
 
 
+    /* =============================================
+       ARSENAL RESULTS
+       ============================================= */
+
     .arsenal-page .match {
         grid-template-columns:
             minmax(0, 1fr)
-            65px
+            82px
             minmax(0, 1fr);
     }
 
     .arsenal-page .score {
-        width: 65px;
+        width: 82px;
     }
 
     .arsenal-page .score strong {
@@ -697,76 +800,7 @@ footer {
 
     .arsenal-page .score small {
         font-size: 9px;
-    }
-}
-/* =====================================================
-   HOME PAGE - MOBILE MATCH CARD
-   Improve spacing between score and date/time
-   ===================================================== */
 
-@media (max-width: 600px) {
-
-    /* Give the centre section more breathing room */
-    body:not(.arsenal-page) .match {
-        grid-template-columns:
-            minmax(0, 1fr)
-            95px
-            minmax(0, 1fr);
-
-        padding: 18px 8px;
-        min-height: 100px;
-    }
-
-    /* Centre score and date */
-    body:not(.arsenal-page) .match .score {
-        width: 95px;
-
-        display: flex;
-        flex-direction: column;
-
-        align-items: center;
-        justify-content: center;
-
-        gap: 9px;
-
-        text-align: center;
-    }
-
-    /* Score */
-    body:not(.arsenal-page) .match .score strong {
-        font-size: 20px;
-        line-height: 1;
-    }
-
-    /* Date and time */
-    body:not(.arsenal-page) .match .score small {
-        display: block;
-
-        margin: 0;
-
-        font-size: 10px;
-        line-height: 1.25;
-
-        text-align: center;
-
-        color: #6b7280;
-
-        white-space: normal;
-    }
-
-    /* Team names */
-    body:not(.arsenal-page) .match .team {
-        font-size: 13px;
-        line-height: 1.2;
-
-        gap: 6px;
-    }
-
-    /* Team crests */
-    body:not(.arsenal-page) .match .team img {
-        width: 30px;
-        height: 30px;
-
-        flex-shrink: 0;
+        max-width: 82px;
     }
 }
