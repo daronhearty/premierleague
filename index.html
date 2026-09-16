@@ -3,14 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Premier League Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>Premier League Tracker</h1>
+    <header>
+        <h1>Premier League Tracker</h1>
 
-    <p>My Premier League website is working!</p>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Fixtures</a>
+            <a href="#">Results</a>
+            <a href="#">Table</a>
+            <a href="#">Teams</a>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <!-- LIVE MATCHES -->
+        <section>
+            <h2>🔴 Live Matches</h2>
+
+            <div id="live-matches" class="matches">
+                <p class="loading">Checking for live matches...</p>
+            </div>
+        </section>
+
+
+        <!-- TODAY'S MATCHES -->
+        <section>
+            <h2>📅 Today's Matches</h2>
+
+            <div id="todays-matches" class="matches">
+                <p class="loading">Loading today's matches...</p>
+            </div>
+        </section>
+
+
+        <!-- LATEST RESULTS -->
+        <section>
+            <h2>⚽ Latest Results</h2>
+
+            <div id="latest-results" class="matches">
+                <p class="loading">Loading latest results...</p>
+            </div>
+        </section>
+
+
+        <!-- NEXT FIXTURES -->
+        <section>
+            <h2>🗓️ Next Fixtures</h2>
+
+            <div id="next-fixtures" class="matches">
+                <p class="loading">Loading next fixtures...</p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Premier League Tracker</p>
+    </footer>
+
+
+    <script src="app.js"></script>
 
 </body>
 </html>
