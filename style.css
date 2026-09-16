@@ -348,3 +348,200 @@ footer {
         max-width: 60px;
     }
 }
+/* =====================================================
+   ARSENAL PAGE
+   ===================================================== */
+
+.arsenal-page {
+    max-width: 1000px;
+}
+
+
+/* =============================
+   ARSENAL HEADER
+   ============================= */
+
+.arsenal-header {
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    margin-bottom: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.arsenal-crest {
+    width: 75px;
+    height: 75px;
+
+    object-fit: contain;
+}
+
+.arsenal-header h2 {
+    margin-bottom: 5px;
+
+    font-size: 30px;
+}
+
+.arsenal-header p {
+    color: #6b7280;
+}
+
+
+/* =============================
+   FEATURE MATCH
+   ============================= */
+
+.arsenal-feature {
+    margin-bottom: 10px;
+}
+
+.arsenal-feature-match {
+    background: white;
+
+    border-radius: 14px;
+
+    min-height: 150px;
+
+    padding: 25px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 150px 1fr;
+
+    align-items: center;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.09);
+}
+
+
+/* =============================
+   FEATURE TEAMS
+   ============================= */
+
+.feature-team {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 20px;
+
+    min-width: 0;
+}
+
+.feature-team:first-child {
+    justify-content: flex-end;
+
+    text-align: right;
+}
+
+.feature-team:last-child {
+    justify-content: flex-start;
+
+    text-align: left;
+}
+
+.feature-team img {
+    width: 55px;
+    height: 55px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+
+/* =============================
+   FEATURE SCORE
+   ============================= */
+
+.feature-score {
+    text-align: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.feature-score strong {
+    font-size: 32px;
+}
+
+.feature-score span {
+    font-size: 13px;
+
+    color: #6b7280;
+
+    text-transform: uppercase;
+}
+
+
+/* =============================
+   ARSENAL MOBILE
+   ============================= */
+
+@media (max-width: 600px) {
+
+    .arsenal-header {
+        padding: 20px;
+
+        margin-bottom: 25px;
+    }
+
+    .arsenal-crest {
+        width: 55px;
+        height: 55px;
+    }
+
+    .arsenal-header h2 {
+        font-size: 25px;
+    }
+
+
+    .arsenal-feature-match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            75px
+            minmax(0, 1fr);
+
+        min-height: 125px;
+
+        padding: 18px 10px;
+    }
+
+
+    .feature-team {
+        font-size: 14px;
+
+        gap: 6px;
+    }
+
+    .feature-team img {
+        width: 35px;
+        height: 35px;
+    }
+
+
+    .feature-score strong {
+        font-size: 24px;
+    }
+
+    .feature-score span {
+        font-size: 9px;
+    }
+}
