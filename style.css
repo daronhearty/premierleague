@@ -363,17 +363,12 @@ footer {
 
 .arsenal-header {
     background: white;
-
     border-radius: 12px;
-
     padding: 25px;
-
     margin-bottom: 35px;
 
     display: flex;
-
     align-items: center;
-
     gap: 20px;
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -382,13 +377,11 @@ footer {
 .arsenal-crest {
     width: 75px;
     height: 75px;
-
     object-fit: contain;
 }
 
 .arsenal-header h2 {
     margin-bottom: 5px;
-
     font-size: 30px;
 }
 
@@ -407,16 +400,13 @@ footer {
 
 .arsenal-feature-match {
     background: white;
-
     border-radius: 14px;
 
     min-height: 150px;
-
     padding: 25px;
 
     display: grid;
-
-    grid-template-columns: 1fr 150px 1fr;
+    grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
 
     align-items: center;
 
@@ -430,31 +420,32 @@ footer {
 
 .feature-team {
     display: flex;
-
     align-items: center;
 
-    gap: 14px;
-
-    font-size: 20px;
+    gap: 12px;
 
     min-width: 0;
+
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .feature-team:first-child {
     justify-content: flex-end;
-
     text-align: right;
 }
 
 .feature-team:last-child {
     justify-content: flex-start;
-
     text-align: left;
 }
 
 .feature-team img {
-    width: 55px;
-    height: 55px;
+    width: 55px !important;
+    height: 55px !important;
+
+    max-width: 55px !important;
+    max-height: 55px !important;
 
     object-fit: contain;
 
@@ -467,23 +458,25 @@ footer {
    ============================= */
 
 .feature-score {
-    text-align: center;
-
     display: flex;
-
     flex-direction: column;
 
     align-items: center;
+    justify-content: center;
+
+    text-align: center;
 
     gap: 7px;
 }
 
 .feature-score strong {
     font-size: 32px;
+    line-height: 1;
 }
 
 .feature-score span {
     font-size: 13px;
+    line-height: 1.3;
 
     color: #6b7280;
 
@@ -491,15 +484,14 @@ footer {
 }
 
 
-/* =============================
-   ARSENAL MOBILE
-   ============================= */
+/* =====================================================
+   MOBILE ARSENAL PAGE
+   ===================================================== */
 
 @media (max-width: 600px) {
 
     .arsenal-header {
         padding: 20px;
-
         margin-bottom: 25px;
     }
 
@@ -513,35 +505,197 @@ footer {
     }
 
 
+    /* =============================
+       NEXT / LATEST MATCH
+       ============================= */
+
     .arsenal-feature-match {
+        min-height: 125px;
+
+        padding: 18px 8px;
+
+        display: grid;
+
         grid-template-columns:
             minmax(0, 1fr)
             75px
             minmax(0, 1fr);
 
-        min-height: 125px;
-
-        padding: 18px 10px;
+        align-items: center;
     }
 
+
+    /* =============================
+       FEATURE TEAM
+       ============================= */
 
     .feature-team {
         font-size: 14px;
-
         gap: 6px;
+
+        min-width: 0;
     }
 
     .feature-team img {
-        width: 35px;
-        height: 35px;
+        width: 38px !important;
+        height: 38px !important;
+
+        max-width: 38px !important;
+        max-height: 38px !important;
     }
 
+    .feature-team strong {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    /* =============================
+       FEATURE SCORE
+       ============================= */
+
+    .feature-score {
+        width: 75px;
+
+        gap: 8px;
+    }
 
     .feature-score strong {
         font-size: 24px;
+        line-height: 1;
     }
 
     .feature-score span {
+        font-size: 10px;
+        line-height: 1.2;
+
+        white-space: nowrap;
+    }
+
+
+    /* =============================
+       RECENT RESULT CARDS
+       ============================= */
+
+    .arsenal-page .match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            75px
+            minmax(0, 1fr);
+
+        padding: 16px 8px;
+
+        min-height: 90px;
+    }
+
+    .arsenal-page .team {
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .arsenal-page .team img {
+        width: 28px;
+        height: 28px;
+    }
+
+
+    /* =============================
+       SCORE + DATE
+       ============================= */
+
+    .arsenal-page .score {
+        width: 75px;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+    }
+
+    .arsenal-page .score strong {
+        font-size: 19px;
+        line-height: 1;
+    }
+
+    .arsenal-page .score small {
+        display: block;
+
+        margin-top: 0;
+
+        font-size: 10px;
+
+        line-height: 1.25;
+
+        text-align: center;
+
+        white-space: nowrap;
+
+        color: #6b7280;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    .arsenal-feature-match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            65px
+            minmax(0, 1fr);
+
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .feature-team {
+        font-size: 12px;
+    }
+
+    .feature-team img {
+        width: 32px !important;
+        height: 32px !important;
+
+        max-width: 32px !important;
+        max-height: 32px !important;
+    }
+
+    .feature-score {
+        width: 65px;
+    }
+
+    .feature-score strong {
+        font-size: 21px;
+    }
+
+    .feature-score span {
+        font-size: 9px;
+    }
+
+
+    .arsenal-page .match {
+        grid-template-columns:
+            minmax(0, 1fr)
+            65px
+            minmax(0, 1fr);
+    }
+
+    .arsenal-page .score {
+        width: 65px;
+    }
+
+    .arsenal-page .score strong {
+        font-size: 18px;
+    }
+
+    .arsenal-page .score small {
         font-size: 9px;
     }
 }
