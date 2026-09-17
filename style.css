@@ -557,7 +557,11 @@ footer {
        HEADER
        --------------------------------------------- */
 
-    header {
+    .table-wrapper {
+    justify-content: flex-start;
+}
+   
+   header {
         padding: 25px 15px;
     }
 
