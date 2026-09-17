@@ -36,6 +36,11 @@ header h1 {
     font-size: 30px;
 }
 
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+
 nav {
     display: flex;
     justify-content: center;
@@ -93,20 +98,16 @@ h2 {
 .match {
     background: white;
     border-radius: 10px;
-
     padding: 18px 24px;
-
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
     display: grid;
-
     grid-template-columns:
         minmax(0, 1fr)
         140px
         minmax(0, 1fr);
 
     align-items: center;
-
     min-height: 82px;
 }
 
@@ -118,22 +119,17 @@ h2 {
 .team {
     display: flex;
     align-items: center;
-
     gap: 10px;
-
     width: 100%;
+    min-width: 0;
 
     font-weight: bold;
-
-    min-width: 0;
 }
 
 .team img {
     width: 32px;
     height: 32px;
-
     object-fit: contain;
-
     flex-shrink: 0;
 }
 
@@ -169,7 +165,6 @@ h2 {
 
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
 
@@ -183,7 +178,6 @@ h2 {
 
 .score strong {
     display: block;
-
     font-size: 20px;
     line-height: 1;
 }
@@ -193,13 +187,11 @@ h2 {
 
     font-size: 12px;
     font-weight: normal;
-
     line-height: 1.25;
 
     color: #6b7280;
 
     text-align: center;
-
     white-space: normal;
 }
 
@@ -219,9 +211,7 @@ h2 {
 
 footer {
     text-align: center;
-
     padding: 30px;
-
     color: #6b7280;
 }
 
@@ -241,16 +231,13 @@ footer {
 
 .arsenal-header {
     background: white;
-
     border-radius: 12px;
 
     padding: 25px;
-
     margin-bottom: 35px;
 
     display: flex;
     align-items: center;
-
     gap: 20px;
 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -261,13 +248,11 @@ footer {
     height: 75px;
 
     object-fit: contain;
-
     flex-shrink: 0;
 }
 
 .arsenal-header h2 {
     margin-bottom: 5px;
-
     font-size: 30px;
 }
 
@@ -286,15 +271,12 @@ footer {
 
 .arsenal-feature-match {
     background: white;
-
     border-radius: 14px;
 
     min-height: 150px;
-
     padding: 25px;
 
     display: grid;
-
     grid-template-columns:
         minmax(0, 1fr)
         150px
@@ -312,27 +294,22 @@ footer {
 
 .feature-team {
     display: flex;
-
     align-items: center;
 
     gap: 12px;
-
     min-width: 0;
 
     font-size: 20px;
-
     font-weight: bold;
 }
 
 .feature-team:first-child {
     justify-content: flex-end;
-
     text-align: right;
 }
 
 .feature-team:last-child {
     justify-content: flex-start;
-
     text-align: left;
 }
 
@@ -344,15 +321,12 @@ footer {
     max-height: 55px !important;
 
     object-fit: contain;
-
     flex-shrink: 0;
 }
 
 .feature-team strong {
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
@@ -363,7 +337,6 @@ footer {
 
 .feature-score {
     display: flex;
-
     flex-direction: column;
 
     align-items: center;
@@ -376,13 +349,11 @@ footer {
 
 .feature-score strong {
     font-size: 32px;
-
     line-height: 1;
 }
 
 .feature-score span {
     font-size: 13px;
-
     line-height: 1.3;
 
     color: #6b7280;
@@ -392,15 +363,173 @@ footer {
 
 
 /* =====================================================
+   PREMIER LEAGUE TABLE
+   ===================================================== */
+
+.table-wrapper {
+    width: 100%;
+
+    background: white;
+    border-radius: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =====================================================
+   TABLE
+   ===================================================== */
+
+#league-table {
+    width: 760px;
+    min-width: 760px;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+
+/* =====================================================
+   TABLE HEADER
+   ===================================================== */
+
+#league-table thead {
+    background: #37003c;
+    color: white;
+}
+
+#league-table th {
+    padding: 14px 10px;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* Position column */
+
+#league-table th:nth-child(1) {
+    width: 55px;
+}
+
+
+/* Team column */
+
+#league-table th:nth-child(2) {
+    width: 240px;
+    text-align: left;
+}
+
+
+/* Statistics columns */
+
+#league-table th:nth-child(n + 3) {
+    width: 58px;
+}
+
+
+/* =====================================================
+   TABLE BODY
+   ===================================================== */
+
+#league-table td {
+    padding: 12px 10px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    font-size: 14px;
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* Position */
+
+#league-table .position {
+    width: 55px;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   TABLE TEAM
+   ===================================================== */
+
+#league-table .table-team {
+    width: 240px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    text-align: left;
+    font-weight: bold;
+}
+
+#league-table .table-team img {
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+#league-table .table-team span {
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   POINTS
+   ===================================================== */
+
+#league-table .points {
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   TABLE HOVER
+   ===================================================== */
+
+#league-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+/* =====================================================
+   ARSENAL TABLE ROW
+   ===================================================== */
+
+#league-table tbody tr.arsenal-row {
+    background: #f3e8f5;
+    font-weight: bold;
+}
+
+#league-table tbody tr.arsenal-row:hover {
+    background: #ead9ed;
+}
+
+
+/* =====================================================
    MOBILE
    ===================================================== */
 
 @media (max-width: 600px) {
 
-
-    /* =============================================
+    /* ---------------------------------------------
        HEADER
-       ============================================= */
+       --------------------------------------------- */
 
     header {
         padding: 25px 15px;
@@ -408,7 +537,6 @@ footer {
 
     header h1 {
         font-size: 24px;
-
         margin-bottom: 20px;
     }
 
@@ -421,13 +549,12 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        MAIN
-       ============================================= */
+       --------------------------------------------- */
 
     main {
         margin: 25px auto;
-
         padding: 0 12px;
     }
 
@@ -440,9 +567,9 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        HOME MATCH CARDS
-       ============================================= */
+       --------------------------------------------- */
 
     .match {
         grid-template-columns:
@@ -458,15 +585,13 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        HOME TEAMS
-       ============================================= */
+       --------------------------------------------- */
 
     .team {
         gap: 6px;
-
         font-size: 13px;
-
         min-width: 0;
     }
 
@@ -477,38 +602,32 @@ footer {
 
     .team span {
         overflow: hidden;
-
         text-overflow: ellipsis;
-
         white-space: nowrap;
     }
 
     .home {
         justify-content: flex-end;
-
         text-align: right;
     }
 
     .away {
         justify-content: flex-start;
-
         text-align: left;
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        HOME SCORE
-       ============================================= */
+       --------------------------------------------- */
 
     .match .score {
         width: 90px;
 
         display: flex;
-
         flex-direction: column;
 
         align-items: center;
-
         justify-content: center;
 
         gap: 9px;
@@ -518,32 +637,28 @@ footer {
 
     .match .score strong {
         font-size: 20px;
-
         line-height: 1;
     }
 
     .match .score small {
         font-size: 10px;
-
         line-height: 1.3;
 
         max-width: 90px;
 
         text-align: center;
-
         white-space: normal;
 
         color: #6b7280;
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL HEADER
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-header {
         padding: 20px;
-
         margin-bottom: 25px;
 
         gap: 15px;
@@ -551,7 +666,6 @@ footer {
 
     .arsenal-crest {
         width: 55px;
-
         height: 55px;
     }
 
@@ -560,9 +674,9 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL FEATURE MATCH
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-feature-match {
         min-height: 125px;
@@ -578,15 +692,13 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL FEATURE TEAMS
-       ============================================= */
+       --------------------------------------------- */
 
     .feature-team {
         font-size: 14px;
-
         gap: 6px;
-
         min-width: 0;
     }
 
@@ -599,36 +711,32 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL FEATURE SCORE
-       ============================================= */
+       --------------------------------------------- */
 
     .feature-score {
         width: 90px;
-
         gap: 8px;
     }
 
     .feature-score strong {
         font-size: 24px;
-
         line-height: 1;
     }
 
     .feature-score span {
         font-size: 10px;
-
         line-height: 1.25;
 
         white-space: normal;
-
         text-align: center;
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL RECENT RESULTS
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-page .match {
         grid-template-columns:
@@ -637,49 +745,88 @@ footer {
             minmax(0, 1fr);
 
         padding: 16px 8px;
-
         min-height: 95px;
     }
 
     .arsenal-page .team {
         font-size: 13px;
-
         gap: 6px;
     }
 
     .arsenal-page .team img {
         width: 28px;
-
         height: 28px;
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL RESULT SCORE + DATE
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-page .score {
         width: 90px;
-
         gap: 8px;
     }
 
     .arsenal-page .score strong {
         font-size: 19px;
-
         line-height: 1;
     }
 
     .arsenal-page .score small {
         font-size: 10px;
-
         line-height: 1.25;
 
         max-width: 90px;
 
         text-align: center;
-
         white-space: normal;
+    }
+
+
+    /* ---------------------------------------------
+       PREMIER LEAGUE TABLE
+       --------------------------------------------- */
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+
+        border-radius: 10px;
+    }
+
+    #league-table {
+        width: 760px;
+        min-width: 760px;
+    }
+
+    #league-table th {
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+
+    #league-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    #league-table th:nth-child(2),
+    #league-table .table-team {
+        width: 240px;
+    }
+
+    #league-table .table-team {
+        gap: 8px;
+    }
+
+    #league-table .table-team img {
+        width: 26px;
+        height: 26px;
     }
 }
 
@@ -690,10 +837,9 @@ footer {
 
 @media (max-width: 380px) {
 
-
-    /* =============================================
+    /* ---------------------------------------------
        HOME MATCH
-       ============================================= */
+       --------------------------------------------- */
 
     .match {
         grid-template-columns:
@@ -702,25 +848,21 @@ footer {
             minmax(0, 1fr);
 
         padding: 16px 6px;
-
         min-height: 98px;
     }
 
     .team {
         font-size: 12px;
-
         gap: 5px;
     }
 
     .team img {
         width: 27px;
-
         height: 27px;
     }
 
     .match .score {
         width: 82px;
-
         gap: 8px;
     }
 
@@ -730,14 +872,13 @@ footer {
 
     .match .score small {
         font-size: 9px;
-
         max-width: 82px;
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL FEATURE
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-feature-match {
         grid-template-columns:
@@ -746,13 +887,11 @@ footer {
             minmax(0, 1fr);
 
         padding-left: 6px;
-
         padding-right: 6px;
     }
 
     .feature-team {
         font-size: 12px;
-
         gap: 5px;
     }
 
@@ -766,7 +905,6 @@ footer {
 
     .feature-score {
         width: 82px;
-
         gap: 7px;
     }
 
@@ -779,9 +917,9 @@ footer {
     }
 
 
-    /* =============================================
+    /* ---------------------------------------------
        ARSENAL RESULTS
-       ============================================= */
+       --------------------------------------------- */
 
     .arsenal-page .match {
         grid-template-columns:
@@ -800,357 +938,16 @@ footer {
 
     .arsenal-page .score small {
         font-size: 9px;
-
         max-width: 82px;
     }
-}
-/* =====================================================
-   PREMIER LEAGUE TABLE
-   ===================================================== */
-
-.table-wrapper {
-    background: white;
-
-    border-radius: 12px;
-
-    overflow-x: auto;
-
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
 
 
-/* =============================
-   TABLE
-   ============================= */
-
-#league-table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 700px;
-}
-
-
-/* =============================
-   TABLE HEADER
-   ============================= */
-
-#league-table thead {
-    background: #37003c;
-
-    color: white;
-}
-
-#league-table th {
-    padding: 14px 10px;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    text-align: center;
-}
-
-#league-table th:nth-child(2) {
-    text-align: left;
-}
-
-
-/* =============================
-   TABLE BODY
-   ============================= */
-
-#league-table td {
-    padding: 12px 10px;
-
-    border-bottom: 1px solid #e5e7eb;
-
-    font-size: 14px;
-
-    text-align: center;
-}
-
-
-/* Position */
-
-#league-table .position {
-    width: 45px;
-
-    font-weight: bold;
-}
-
-
-/* =============================
-   TEAM
-   ============================= */
-
-#league-table .table-team {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    text-align: left;
-
-    font-weight: bold;
-
-    min-width: 200px;
-}
-
-#league-table .table-team img {
-    width: 28px;
-    height: 28px;
-
-    object-fit: contain;
-
-    flex-shrink: 0;
-}
-
-
-/* =============================
-   POINTS
-   ============================= */
-
-#league-table .points {
-    font-weight: bold;
-}
-
-
-/* =============================
-   ROW HOVER
-   ============================= */
-
-#league-table tbody tr:hover {
-    background: #f9fafb;
-}
-
-
-/* =============================
-   ARSENAL ROW
-   ============================= */
-
-#league-table tbody tr.arsenal-row {
-    background: #f3e8f5;
-
-    font-weight: bold;
-}
-
-#league-table tbody tr.arsenal-row:hover {
-    background: #ead9ed;
-}
-
-
-/* =====================================================
-   TABLE MOBILE
-   ===================================================== */
-
-@media (max-width: 600px) {
-
-    .table-wrapper {
-        border-radius: 10px;
-    }
+    /* ---------------------------------------------
+       TABLE
+       --------------------------------------------- */
 
     #league-table {
-        min-width: 650px;
-    }
-
-    #league-table th {
-        padding: 12px 8px;
-
-        font-size: 12px;
-    }
-
-    #league-table td {
-        padding: 10px 8px;
-
-        font-size: 13px;
-    }
-
-    #league-table .table-team {
-        min-width: 180px;
-
-        gap: 8px;
-    }
-
-    #league-table .table-team img {
-        width: 26px;
-        height: 26px;
-    }
-}
-/* =====================================================
-   PREMIER LEAGUE TABLE
-   ===================================================== */
-
-.table-wrapper {
-    background: white;
-
-    border-radius: 12px;
-
-    overflow-x: auto;
-
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-
-/* =============================
-   TABLE
-   ============================= */
-
-#league-table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 700px;
-}
-
-
-/* =============================
-   TABLE HEADER
-   ============================= */
-
-#league-table thead {
-    background: #37003c;
-
-    color: white;
-}
-
-#league-table th {
-    padding: 14px 10px;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    text-align: center;
-}
-
-#league-table th:nth-child(2) {
-    text-align: left;
-}
-
-
-/* =============================
-   TABLE BODY
-   ============================= */
-
-#league-table td {
-    padding: 12px 10px;
-
-    border-bottom: 1px solid #e5e7eb;
-
-    font-size: 14px;
-
-    text-align: center;
-}
-
-
-/* Position */
-
-#league-table .position {
-    width: 45px;
-
-    font-weight: bold;
-}
-
-
-/* =============================
-   TEAM
-   ============================= */
-
-#league-table .table-team {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    text-align: left;
-
-    font-weight: bold;
-
-    min-width: 200px;
-}
-
-#league-table .table-team img {
-    width: 28px;
-    height: 28px;
-
-    object-fit: contain;
-
-    flex-shrink: 0;
-}
-
-
-/* =============================
-   POINTS
-   ============================= */
-
-#league-table .points {
-    font-weight: bold;
-}
-
-
-/* =============================
-   ROW HOVER
-   ============================= */
-
-#league-table tbody tr:hover {
-    background: #f9fafb;
-}
-
-
-/* =============================
-   ARSENAL ROW
-   ============================= */
-
-#league-table tbody tr.arsenal-row {
-    background: #f3e8f5;
-
-    font-weight: bold;
-}
-
-#league-table tbody tr.arsenal-row:hover {
-    background: #ead9ed;
-}
-
-
-/* =====================================================
-   TABLE MOBILE
-   ===================================================== */
-
-@media (max-width: 600px) {
-
-    .table-wrapper {
-        border-radius: 10px;
-    }
-
-    #league-table {
-        min-width: 650px;
-    }
-
-    #league-table th {
-        padding: 12px 8px;
-
-        font-size: 12px;
-    }
-
-    #league-table td {
-        padding: 10px 8px;
-
-        font-size: 13px;
-    }
-
-    #league-table .table-team {
-        min-width: 180px;
-
-        gap: 8px;
-    }
-
-    #league-table .table-team img {
-        width: 26px;
-        height: 26px;
+        width: 760px;
+        min-width: 760px;
     }
 }
