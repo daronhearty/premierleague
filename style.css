@@ -979,3 +979,178 @@ footer {
         height: 26px;
     }
 }
+/* =====================================================
+   PREMIER LEAGUE TABLE
+   ===================================================== */
+
+.table-wrapper {
+    background: white;
+
+    border-radius: 12px;
+
+    overflow-x: auto;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =============================
+   TABLE
+   ============================= */
+
+#league-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 700px;
+}
+
+
+/* =============================
+   TABLE HEADER
+   ============================= */
+
+#league-table thead {
+    background: #37003c;
+
+    color: white;
+}
+
+#league-table th {
+    padding: 14px 10px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    text-align: center;
+}
+
+#league-table th:nth-child(2) {
+    text-align: left;
+}
+
+
+/* =============================
+   TABLE BODY
+   ============================= */
+
+#league-table td {
+    padding: 12px 10px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* Position */
+
+#league-table .position {
+    width: 45px;
+
+    font-weight: bold;
+}
+
+
+/* =============================
+   TEAM
+   ============================= */
+
+#league-table .table-team {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-align: left;
+
+    font-weight: bold;
+
+    min-width: 200px;
+}
+
+#league-table .table-team img {
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+
+/* =============================
+   POINTS
+   ============================= */
+
+#league-table .points {
+    font-weight: bold;
+}
+
+
+/* =============================
+   ROW HOVER
+   ============================= */
+
+#league-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+/* =============================
+   ARSENAL ROW
+   ============================= */
+
+#league-table tbody tr.arsenal-row {
+    background: #f3e8f5;
+
+    font-weight: bold;
+}
+
+#league-table tbody tr.arsenal-row:hover {
+    background: #ead9ed;
+}
+
+
+/* =====================================================
+   TABLE MOBILE
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+    .table-wrapper {
+        border-radius: 10px;
+    }
+
+    #league-table {
+        min-width: 650px;
+    }
+
+    #league-table th {
+        padding: 12px 8px;
+
+        font-size: 12px;
+    }
+
+    #league-table td {
+        padding: 10px 8px;
+
+        font-size: 13px;
+    }
+
+    #league-table .table-team {
+        min-width: 180px;
+
+        gap: 8px;
+    }
+
+    #league-table .table-team img {
+        width: 26px;
+        height: 26px;
+    }
+}
