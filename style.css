@@ -99,6 +99,7 @@ h2 {
     background: white;
     border-radius: 10px;
     padding: 18px 24px;
+
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
     display: grid;
@@ -108,6 +109,7 @@ h2 {
         minmax(0, 1fr);
 
     align-items: center;
+
     min-height: 82px;
 }
 
@@ -120,6 +122,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 10px;
+
     width: 100%;
     min-width: 0;
 
@@ -129,6 +132,7 @@ h2 {
 .team img {
     width: 32px;
     height: 32px;
+
     object-fit: contain;
     flex-shrink: 0;
 }
@@ -178,6 +182,7 @@ h2 {
 
 .score strong {
     display: block;
+
     font-size: 20px;
     line-height: 1;
 }
@@ -277,6 +282,7 @@ footer {
     padding: 25px;
 
     display: grid;
+
     grid-template-columns:
         minmax(0, 1fr)
         150px
@@ -368,6 +374,7 @@ footer {
 
 .table-wrapper {
     width: 100%;
+
     overflow-x: auto;
     overflow-y: hidden;
 
@@ -389,9 +396,11 @@ footer {
     border-spacing: 0;
 
     background: white;
-    border-radius: 12px;
 
+    border-radius: 12px;
     overflow: hidden;
+
+    table-layout: fixed;
 }
 
 
@@ -416,14 +425,23 @@ footer {
     white-space: nowrap;
 }
 
-#league-table th:first-child {
+
+/* Position */
+
+#league-table th:nth-child(1) {
     width: 55px;
 }
+
+
+/* Team */
 
 #league-table th:nth-child(2) {
     width: 240px;
     text-align: left;
 }
+
+
+/* Statistics */
 
 #league-table th:nth-child(n + 3) {
     width: 58px;
@@ -450,7 +468,7 @@ footer {
 }
 
 
-/* Remove final row border */
+/* Remove border from final row */
 
 #league-table tbody tr:last-child td {
     border-bottom: none;
@@ -458,7 +476,7 @@ footer {
 
 
 /* =====================================================
-   POSITION
+   TABLE POSITION
    ===================================================== */
 
 #league-table .position {
@@ -469,7 +487,7 @@ footer {
 
 
 /* =====================================================
-   TEAM
+   TABLE TEAM
    ===================================================== */
 
 #league-table .table-team {
@@ -498,7 +516,7 @@ footer {
 
 
 /* =====================================================
-   POINTS
+   TABLE POINTS
    ===================================================== */
 
 #league-table .points {
@@ -507,7 +525,7 @@ footer {
 
 
 /* =====================================================
-   HOVER
+   TABLE HOVER
    ===================================================== */
 
 #league-table tbody tr:hover td {
@@ -516,7 +534,7 @@ footer {
 
 
 /* =====================================================
-   ARSENAL ROW
+   ARSENAL TABLE ROW
    ===================================================== */
 
 #league-table tbody tr.arsenal-row td {
@@ -530,75 +548,31 @@ footer {
 
 
 /* =====================================================
-   MOBILE TABLE
+   MOBILE
    ===================================================== */
 
 @media (max-width: 600px) {
 
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
+    /* ---------------------------------------------
+       HEADER
+       --------------------------------------------- */
 
-        -webkit-overflow-scrolling: touch;
-
-        border-radius: 10px;
+    header {
+        padding: 25px 15px;
     }
 
-    #league-table {
-        width: 760px;
-        min-width: 760px;
+    header h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
     }
 
-    #league-table th {
-        height: 38px;
-
-        padding: 0 8px;
-
-        font-size: 12px;
+    nav {
+        gap: 15px;
     }
 
-    #league-table td {
-        height: 52px;
-
-        padding: 0 8px;
-
-        font-size: 13px;
+    nav a {
+        font-size: 15px;
     }
-
-    #league-table th:nth-child(2),
-    #league-table .table-team {
-        width: 240px;
-    }
-
-    #league-table .table-team img {
-        width: 26px;
-        height: 26px;
-
-        margin-right: 8px;
-    }
-}
-
-
-/* =====================================================
-   SMALL PHONES
-   ===================================================== */
-
-@media (max-width: 380px) {
-
-    #league-table {
-        width: 760px;
-        min-width: 760px;
-    }
-
-    #league-table th {
-        font-size: 11px;
-    }
-
-    #league-table td {
-        font-size: 12px;
-    }
-}
 
 
     /* ---------------------------------------------
@@ -797,6 +771,7 @@ footer {
             minmax(0, 1fr);
 
         padding: 16px 8px;
+
         min-height: 95px;
     }
 
@@ -858,12 +833,18 @@ footer {
     }
 
     #league-table th {
-        padding: 12px 8px;
+        height: 38px;
+
+        padding: 0 8px;
+
         font-size: 12px;
     }
 
     #league-table td {
-        padding: 10px 8px;
+        height: 52px;
+
+        padding: 0 8px;
+
         font-size: 13px;
     }
 
@@ -872,13 +853,11 @@ footer {
         width: 240px;
     }
 
-    #league-table .table-team {
-        gap: 8px;
-    }
-
     #league-table .table-team img {
         width: 26px;
         height: 26px;
+
+        margin-right: 8px;
     }
 }
 
@@ -900,6 +879,7 @@ footer {
             minmax(0, 1fr);
 
         padding: 16px 6px;
+
         min-height: 98px;
     }
 
@@ -1001,5 +981,13 @@ footer {
     #league-table {
         width: 760px;
         min-width: 760px;
+    }
+
+    #league-table th {
+        font-size: 11px;
+    }
+
+    #league-table td {
+        font-size: 12px;
     }
 }
