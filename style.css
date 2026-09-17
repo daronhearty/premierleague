@@ -374,13 +374,13 @@ footer {
 
 .table-wrapper {
     width: 100%;
-
     overflow-x: auto;
     overflow-y: hidden;
-
     -webkit-overflow-scrolling: touch;
-
     border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
 }
 
 
