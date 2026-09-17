@@ -368,12 +368,10 @@ footer {
 
 .table-wrapper {
     width: 100%;
-    background: white;
-    border-radius: 12px;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
 }
 
 #league-table {
@@ -381,6 +379,7 @@ footer {
     min-width: 760px;
     border-collapse: collapse;
     table-layout: fixed;
+    background: white;
 }
 
 
@@ -530,26 +529,19 @@ footer {
 
 @media (max-width: 600px) {
 
-    /* ---------------------------------------------
-       HEADER
-       --------------------------------------------- */
-
-    header {
-        padding: 25px 15px;
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
     }
 
-    header h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
+    #league-table {
+        width: 760px;
+        min-width: 760px;
     }
-
-    nav {
-        gap: 15px;
-    }
-
-    nav a {
-        font-size: 15px;
-    }
+}
 
 
     /* ---------------------------------------------
