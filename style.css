@@ -370,16 +370,10 @@ footer {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-}
 
-#league-table {
-    width: 100%;
-    min-width: 760px;
-    border-collapse: collapse;
-    table-layout: fixed;
-    background: white;
+    -webkit-overflow-scrolling: touch;
+
+    border-radius: 12px;
 }
 
 
@@ -388,11 +382,16 @@ footer {
    ===================================================== */
 
 #league-table {
-    width: 760px;
+    width: 100%;
     min-width: 760px;
 
-    border-collapse: collapse;
-    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    background: white;
+    border-radius: 12px;
+
+    overflow: hidden;
 }
 
 
@@ -406,7 +405,9 @@ footer {
 }
 
 #league-table th {
-    padding: 14px 10px;
+    height: 40px;
+
+    padding: 0 10px;
 
     font-size: 13px;
     font-weight: bold;
@@ -415,23 +416,14 @@ footer {
     white-space: nowrap;
 }
 
-
-/* Position column */
-
-#league-table th:nth-child(1) {
+#league-table th:first-child {
     width: 55px;
 }
-
-
-/* Team column */
 
 #league-table th:nth-child(2) {
     width: 240px;
     text-align: left;
 }
-
-
-/* Statistics columns */
 
 #league-table th:nth-child(n + 3) {
     width: 58px;
@@ -443,51 +435,65 @@ footer {
    ===================================================== */
 
 #league-table td {
-    padding: 12px 10px;
+    height: 52px;
+
+    padding: 0 10px;
 
     border-bottom: 1px solid #e5e7eb;
 
     font-size: 14px;
+
     text-align: center;
+    vertical-align: middle;
 
     white-space: nowrap;
 }
 
 
-/* Position */
+/* Remove final row border */
+
+#league-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =====================================================
+   POSITION
+   ===================================================== */
 
 #league-table .position {
     width: 55px;
+
     font-weight: bold;
 }
 
 
 /* =====================================================
-   TABLE TEAM
+   TEAM
    ===================================================== */
 
 #league-table .table-team {
     width: 240px;
 
-    display: flex;
-    align-items: center;
-
-    gap: 10px;
-
     text-align: left;
     font-weight: bold;
+
+    white-space: nowrap;
 }
 
 #league-table .table-team img {
     width: 28px;
     height: 28px;
 
+    margin-right: 10px;
+
+    vertical-align: middle;
+
     object-fit: contain;
-    flex-shrink: 0;
 }
 
 #league-table .table-team span {
-    white-space: nowrap;
+    vertical-align: middle;
 }
 
 
@@ -501,30 +507,30 @@ footer {
 
 
 /* =====================================================
-   TABLE HOVER
+   HOVER
    ===================================================== */
 
-#league-table tbody tr:hover {
+#league-table tbody tr:hover td {
     background: #f9fafb;
 }
 
 
 /* =====================================================
-   ARSENAL TABLE ROW
+   ARSENAL ROW
    ===================================================== */
 
-#league-table tbody tr.arsenal-row {
+#league-table tbody tr.arsenal-row td {
     background: #f3e8f5;
     font-weight: bold;
 }
 
-#league-table tbody tr.arsenal-row:hover {
+#league-table tbody tr.arsenal-row:hover td {
     background: #ead9ed;
 }
 
 
 /* =====================================================
-   MOBILE
+   MOBILE TABLE
    ===================================================== */
 
 @media (max-width: 600px) {
@@ -533,13 +539,64 @@ footer {
         width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
+
         -webkit-overflow-scrolling: touch;
+
         border-radius: 10px;
     }
 
     #league-table {
         width: 760px;
         min-width: 760px;
+    }
+
+    #league-table th {
+        height: 38px;
+
+        padding: 0 8px;
+
+        font-size: 12px;
+    }
+
+    #league-table td {
+        height: 52px;
+
+        padding: 0 8px;
+
+        font-size: 13px;
+    }
+
+    #league-table th:nth-child(2),
+    #league-table .table-team {
+        width: 240px;
+    }
+
+    #league-table .table-team img {
+        width: 26px;
+        height: 26px;
+
+        margin-right: 8px;
+    }
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    #league-table {
+        width: 760px;
+        min-width: 760px;
+    }
+
+    #league-table th {
+        font-size: 11px;
+    }
+
+    #league-table td {
+        font-size: 12px;
     }
 }
 
