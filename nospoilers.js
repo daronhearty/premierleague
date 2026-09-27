@@ -1,42 +1,64 @@
-const API_URL =
+const MATCHES_API_URL =
 "https://premier-league-api.daronhearty.workers.dev/?endpoint=competitions/PL/matches";
 
-/*
-Premier League teams
-
-```
-The IDs are football-data.org team IDs.
-```
-
-*/
-
-const teams = [
-{ id: 57, name: "Arsenal" },
-{ id: 61, name: "Chelsea" },
-{ id: 65, name: "Man City" },
-{ id: 66, name: "Man United" },
-{ id: 64, name: "Liverpool" },
-{ id: 62, name: "Everton" },
-{ id: 67, name: "Newcastle" },
-{ id: 73, name: "Tottenham" },
-{ id: 71, name: "Sunderland" },
-{ id: 76, name: "Wolverhampton" },
-{ id: 397, name: "Fulham" },
-{ id: 63, name: "Leicester City" },
-{ id: 338, name: "Brighton" },
-{ id: 68, name: "Norwich City" },
-{ id: 69, name: "Southampton" },
-{ id: 70, name: "Burnley" },
-{ id: 351, name: "Crystal Palace" },
-{ id: 340, name: "Nottingham Forest" },
-{ id: 72, name: "Brentford" },
-{ id: 74, name: "Aston Villa" }
-];
+const TEAMS_API_URL =
+"https://premier-league-api.daronhearty.workers.dev/?endpoint=competitions/PL/teams";
 
 let allMatches = [];
 
+let allTeams = [];
+
 const teamSelect =
 document.getElementById("team-select");
+
+/*
+Load the current Premier League teams
+*/
+
+async function loadTeams() {
+
+```
+try {
+
+    const response =
+        await fetch(TEAMS_API_URL);
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Teams API error: ${response.status}`
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    allTeams =
+        data.teams || [];
+
+
+    populateTeamSelector();
+
+
+} catch (error) {
+
+    console.error(
+        "Failed to load Premier League teams:",
+        error
+    );
+
+
+    teamSelect.innerHTML =
+        '<option value="">Unable to load teams</option>';
+
+}
+```
+
+}
 
 /*
 Populate the team selector
@@ -45,17 +67,64 @@ Populate the team selector
 function populateTeamSelector() {
 
 ```
-teams.forEach(team => {
+teamSelect.innerHTML =
+    '<option value="">Select your team...</option>';
+
+
+const sortedTeams =
+    [...allTeams].sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
+
+
+sortedTeams.forEach(team => {
 
     const option =
         document.createElement("option");
 
-    option.value = team.id;
-    option.textContent = team.name;
+
+    option.value =
+        team.id;
+
+
+    option.textContent =
+        team.shortName ||
+        team.name;
+
 
     teamSelect.appendChild(option);
 
 });
+
+
+/*
+    Restore previously selected team
+*/
+
+const savedTeam =
+    localStorage.getItem(
+        "selectedPremierLeagueTeam"
+    );
+
+
+if (savedTeam) {
+
+    const teamExists =
+        allTeams.some(
+            team =>
+                String(team.id) ===
+                String(savedTeam)
+        );
+
+
+    if (teamExists) {
+
+        teamSelect.value =
+            savedTeam;
+
+    }
+
+}
 ```
 
 }
@@ -67,11 +136,16 @@ Get today's date in Ireland
 function getTodayString() {
 
 ```
-const now = new Date();
+const now =
+    new Date();
 
-return now.toLocaleDateString("en-CA", {
-    timeZone: "Europe/Dublin"
-});
+
+return now.toLocaleDateString(
+    "en-CA",
+    {
+        timeZone: "Europe/Dublin"
+    }
+);
 ```
 
 }
@@ -83,16 +157,21 @@ Format match date/time
 function formatDate(dateString) {
 
 ```
-const date = new Date(dateString);
+const date =
+    new Date(dateString);
 
-return date.toLocaleString("en-IE", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Dublin"
-});
+
+return date.toLocaleString(
+    "en-IE",
+    {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Europe/Dublin"
+    }
+);
 ```
 
 }
@@ -109,22 +188,28 @@ const homeTeam =
     match.homeTeam?.name ||
     "Home";
 
+
 const awayTeam =
     match.awayTeam?.shortName ||
     match.awayTeam?.name ||
     "Away";
 
+
 const homeCrest =
     match.homeTeam?.crest || "";
+
 
 const awayCrest =
     match.awayTeam?.crest || "";
 
+
 const homeScore =
     match.score?.fullTime?.home;
 
+
 const awayScore =
     match.score?.fullTime?.away;
+
 
 const isPlayed =
     homeScore !== null &&
@@ -132,9 +217,11 @@ const isPlayed =
     awayScore !== null &&
     awayScore !== undefined;
 
-const score = isPlayed
-    ? `${homeScore} - ${awayScore}`
-    : "vs";
+
+const score =
+    isPlayed
+        ? `${homeScore} - ${awayScore}`
+        : "vs";
 
 
 return `
@@ -203,13 +290,15 @@ Get the currently selected team
 function getSelectedTeam() {
 
 ```
-return localStorage.getItem("selectedPremierLeagueTeam");
+return localStorage.getItem(
+    "selectedPremierLeagueTeam"
+);
 ```
 
 }
 
 /*
-Filter out the selected team's matches
+Remove the selected team's matches
 */
 
 function getFilteredMatches() {
@@ -218,12 +307,22 @@ function getFilteredMatches() {
 const selectedTeam =
     getSelectedTeam();
 
+
+/*
+    If no team has been selected,
+    show everything.
+*/
+
 if (!selectedTeam) {
+
     return allMatches;
+
 }
+
 
 const teamId =
     Number(selectedTeam);
+
 
 return allMatches.filter(match => {
 
@@ -244,22 +343,43 @@ Display today's fixtures
 function displayTodaysFixtures() {
 
 ```
-const matches =
-    getFilteredMatches();
+const container =
+    document.getElementById(
+        "todays-fixtures"
+    );
+
+
+const selectedTeam =
+    getSelectedTeam();
+
+
+if (!selectedTeam) {
+
+    container.innerHTML =
+        '<p class="loading">Select your team above.</p>';
+
+    return;
+
+}
+
 
 const today =
     getTodayString();
 
 
 const todaysMatches =
-    matches
+    getFilteredMatches()
         .filter(match => {
 
             const matchDate =
                 new Date(match.utcDate)
-                    .toLocaleDateString("en-CA", {
-                        timeZone: "Europe/Dublin"
-                    });
+                    .toLocaleDateString(
+                        "en-CA",
+                        {
+                            timeZone: "Europe/Dublin"
+                        }
+                    );
+
 
             return matchDate === today;
 
@@ -272,12 +392,6 @@ const todaysMatches =
             );
 
         });
-
-
-const container =
-    document.getElementById(
-        "todays-fixtures"
-    );
 
 
 if (todaysMatches.length === 0) {
@@ -305,12 +419,28 @@ Display latest results
 function displayLatestResults() {
 
 ```
-const matches =
-    getFilteredMatches();
+const container =
+    document.getElementById(
+        "latest-results"
+    );
+
+
+const selectedTeam =
+    getSelectedTeam();
+
+
+if (!selectedTeam) {
+
+    container.innerHTML =
+        '<p class="loading">Select your team above.</p>';
+
+    return;
+
+}
 
 
 const results =
-    matches
+    getFilteredMatches()
         .filter(match => {
 
             return match.status === "FINISHED";
@@ -325,12 +455,6 @@ const results =
 
         })
         .slice(0, 10);
-
-
-const container =
-    document.getElementById(
-        "latest-results"
-    );
 
 
 if (results.length === 0) {
@@ -352,7 +476,7 @@ container.innerHTML =
 }
 
 /*
-Update the page when a team is selected
+Update the page
 */
 
 function updatePage() {
@@ -411,13 +535,13 @@ async function loadMatches() {
 try {
 
     const response =
-        await fetch(API_URL);
+        await fetch(MATCHES_API_URL);
 
 
     if (!response.ok) {
 
         throw new Error(
-            `API error: ${response.status}`
+            `Matches API error: ${response.status}`
         );
 
     }
@@ -437,7 +561,7 @@ try {
 } catch (error) {
 
     console.error(
-        "Failed to load Premier League data:",
+        "Failed to load Premier League matches:",
         error
     );
 
@@ -459,25 +583,9 @@ try {
 }
 
 /*
-Start page
+Start the page
 */
 
-populateTeamSelector();
-
-/*
-Restore previously selected team
-*/
-
-const savedTeam =
-getSelectedTeam();
-
-if (savedTeam) {
-
-```
-teamSelect.value =
-    savedTeam;
-```
-
-}
+loadTeams();
 
 loadMatches();
