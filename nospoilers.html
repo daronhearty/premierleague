@@ -1,91 +1,96 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Premier League - No Spoilers</title>
+```
+<title>Premier League - No Spoilers</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+```
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Premier League Tracker</h1>
+```
+<header>
+    <h1>Premier League Tracker</h1>
 
-        <nav>
-            <a href="index.html">Home</a>
-    <!--<a href="#">Fixtures</a>"-->
-          <a href="nospoilers.html">No Spoilers</a>
-    <!--<a href="#">Results</a>-->
-    <a href="table.html">Table</a>
-    <a href="arsenal.html">Arsenal</a>
-        </nav>
-    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="nospoilers.html">Fixtures</a>
+        <a href="nospoilers.html">Results</a>
+        <a href="table.html">Table</a>
+        <a href="arsenal.html">Arsenal</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="team-selector-section">
+
+        <h2>No Spoilers</h2>
+
+        <p>
+            Select your team and we'll hide their matches and results.
+        </p>
+
+        <div class="team-selector">
+
+            <label for="team-select">
+                My team
+            </label>
+
+            <select id="team-select">
+                <option value="">Select your team...</option>
+            </select>
+
+        </div>
+
+    </section>
 
 
-    <main>
+    <section>
 
-        <!-- NO SPOILERS INTRO -->
+        <h2>Today's Fixtures</h2>
 
-        <section>
+        <div id="todays-fixtures" class="matches">
 
-            <h2>No Spoilers</h2>
-
-            <p>
-                Today's fixtures and recent Premier League results,
-                excluding Arsenal matches.
+            <p class="loading">
+                Select your team to continue.
             </p>
 
-        </section>
+        </div>
+
+    </section>
 
 
-        <!-- TODAY'S FIXTURES -->
+    <section>
 
-        <section>
+        <h2>Latest Results</h2>
 
-            <h2>Today's Fixtures</h2>
+        <div id="latest-results" class="matches">
 
-            <div id="todays-fixtures" class="matches">
+            <p class="loading">
+                Select your team to continue.
+            </p>
 
-                <p class="loading">
-                    Loading today's fixtures...
-                </p>
+        </div>
 
-            </div>
+    </section>
 
-        </section>
+</main>
 
+<footer>
+    <p>Premier League Tracker</p>
+</footer>
 
-        <!-- LATEST RESULTS -->
-
-        <section>
-
-            <h2>Latest Results</h2>
-
-            <div id="latest-results" class="matches">
-
-                <p class="loading">
-                    Loading latest results...
-                </p>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <footer>
-        <p>Premier League Tracker</p>
-    </footer>
-
-
-    <!-- IMPORTANT: THIS IS nospoilers.js -->
-
-    <script src="nospoilers.js"></script>
+<script src="nospoilers.js"></script>
+```
 
 </body>
 
