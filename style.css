@@ -602,7 +602,20 @@ footer {
     nav a {
         font-size: 15px;
     }
+    .team-selector {
+        gap: 10px;
+        margin-top: 10px;
+    }
 
+    .team-selector label {
+        font-size: 18px;
+    }
+
+    #team-select {
+        font-size: 17px;
+        padding: 9px 36px 9px 12px;
+        min-height: 44px;
+    }
 
     /* ---------------------------------------------
        MAIN
