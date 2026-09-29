@@ -66,9 +66,25 @@ function buildTeamList() {
     });
 
 
-    allTeams =
-        Array.from(teams.values())
-            .sort((a, b) => {
+    /*
+        Use the full Premier League badge list for the selector,
+        so every current team is available even if they have not
+        appeared in the API response yet.
+    */
+    const apiTeams = Array.from(teams.values());
+
+    allTeams = TEAM_BADGES.map(badge => {
+        const apiTeam = apiTeams.find(
+            team => String(team.id) === String(badge.id)
+        );
+
+        return apiTeam || {
+            id: badge.id,
+            name: badge.name,
+            shortName: badge.name,
+            crest: badge.crest
+        };
+    }).sort((a, b) => {
 
                 const nameA =
                     a.shortName || a.name || "";
