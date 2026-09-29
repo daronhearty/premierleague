@@ -1,81 +1,95 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Premier League Tracker</title>
+<title>Premier League - No Spoilers</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Premier League Tracker</h1>
+<header>
+    <h1>Premier League Tracker</h1>
 
-      <nav>
-    <a href="index.html">Home</a>
-    <!--<a href="#">Fixtures</a>"-->
-          <a href="nospoilers.html">No Spoilers</a>
-    <!--<a href="#">Results</a>-->
-    <a href="table.html">Table</a>
-    <a href="arsenal.html">Arsenal</a>
-</nav>
-    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="latest.html">Latest</a>
+        <a href="table.html">Table</a>
+        <a href="arsenal.html">Arsenal</a>
+    </nav>
+</header>
 
+<main>
 
-    <main>
+    <section class="team-selector-section">
 
-        <!-- LIVE MATCHES -->
-        <section>
-            <h2>🔴 Live Matches</h2>
+        <h2>No Spoilers</h2>
 
-            <div id="live-matches" class="matches">
-                <p class="loading">Checking for live matches...</p>
-            </div>
-        </section>
+        <p>
+            Select your team and we'll hide their matches and results.
+        </p>
 
+        <br>
+        
+        <div class="team-selector">
 
-        <!-- TODAY'S MATCHES -->
-        <section>
-            <h2>📅 Today's Matches</h2>
+            <label for="team-select">
+                My team
+            </label>
+            <select id="team-select">
+                <option value="">Select your team...</option>
+            </select>
 
-            <div id="todays-matches" class="matches">
-                <p class="loading">Loading today's matches...</p>
-            </div>
-        </section>
+        </div>
 
-
-        <!-- LATEST RESULTS -->
-        <section>
-            <h2>⚽ Latest Results</h2>
-
-            <div id="latest-results" class="matches">
-                <p class="loading">Loading latest results...</p>
-            </div>
-        </section>
+    </section>
 
 
-        <!-- NEXT FIXTURES -->
-        <section>
-            <h2>🗓️ Next Fixtures</h2>
+    <section>
 
-            <div id="next-fixtures" class="matches">
-                <p class="loading">Loading next fixtures...</p>
-            </div>
-        </section>
+        <h2>Today's Fixtures</h2>
 
-    </main>
+        <div id="todays-fixtures" class="matches">
 
+            <p class="loading">
+                Select your team to continue.
+            </p>
 
-    <footer>
-        <p>Premier League Tracker</p>
-        <p>by Daron Hearty</p>
-    </footer>
+        </div>
+
+    </section>
 
 
-    <script src="app.js"></script>
+    <section>
+
+        <h2>Latest Results</h2>
+
+        <div id="latest-results" class="matches">
+
+            <p class="loading">
+                Select your team to continue.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>Premier League Tracker</p>
+    <p>by Daron Hearty</p>
+    <p>Football data provided by the Football-Data.org API</p>
+</footer>
+
+<script src="nospoilers.js"></script>
 
 </body>
+
 </html>
