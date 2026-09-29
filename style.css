@@ -1537,3 +1537,51 @@ footer {
         stroke-width: 2.7;
     }
 }
+
+
+/* =====================================================
+   FOOTER REFINEMENT
+   ===================================================== */
+
+footer {
+    margin-top: 50px;
+    padding: 24px 20px 30px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+    line-height: 1.6;
+    border-top: 1px solid #e5e7eb;
+}
+
+footer p {
+    display: inline;
+    margin: 0;
+}
+
+footer p:first-child {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+footer p + p::before {
+    content: " · ";
+    color: #c4c8ce;
+    padding: 0 4px;
+}
+
+@media (max-width: 600px) {
+    footer {
+        margin-top: 40px;
+        padding: 22px 16px 28px;
+        font-size: 12px;
+    }
+
+    footer p {
+        display: inline;
+    }
+
+    footer p + p::before {
+        content: " · ";
+        padding: 0 2px;
+    }
+}
