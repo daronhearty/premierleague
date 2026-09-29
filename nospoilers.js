@@ -128,23 +128,14 @@ function populateTeamSelector() {
         );
 
 
-    if (savedTeam) {
+    /*
 
-        const teamExists =
-            allTeams.some(team =>
-                String(team.id) ===
-                String(savedTeam)
-            );
+        Keep the placeholder selected by default.
+        A saved team is still used for the page filter,
+        but the dropdown remains on "Select your team..."
+        until the user chooses a team from the dropdown.
 
-
-        if (teamExists) {
-
-            teamSelect.value =
-                savedTeam;
-
-        }
-
-    }
+    */
 
 }
 
@@ -169,7 +160,7 @@ function populateTeamBadges() {
 
 function selectTeam(teamId) {
     localStorage.setItem("selectedPremierLeagueTeam", String(teamId));
-    teamSelect.value = String(teamId);
+    teamSelect.value = "";
     document.getElementById("team-badges").classList.add("hidden");
     updatePage();
 }
