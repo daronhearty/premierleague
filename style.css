@@ -1055,9 +1055,9 @@ footer {
 
 .team-badges {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
-    max-width: 500px;
+    max-width: none;
 }
 
 .team-badge {
@@ -1106,6 +1106,7 @@ footer {
 @media (max-width: 600px) {
     .team-badges {
         max-width: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
     }
 
