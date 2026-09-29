@@ -1424,7 +1424,7 @@ footer {
         padding: 0 max(30px, calc((100% - 1180px) / 2));
         display: flex;
         align-items: stretch;
-        justify-content: flex-start;
+        justify-content: center;
         gap: 0;
         background: #080719;
         border-top: 1px solid rgba(255,255,255,.1);
