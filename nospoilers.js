@@ -170,6 +170,7 @@ function selectTeam(teamId) {
     localStorage.setItem("selectedPremierLeagueTeam", String(teamId));
     teamSelect.value = String(teamId);
     updateTeamSelector();
+    updateBadgePicker();
     updatePage();
 }
 
