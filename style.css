@@ -1394,7 +1394,7 @@ footer {
     .site-brand {
         position: relative;
         z-index: 2;
-        width: min(1180px, calc(100% - 60px));
+        width: min(1000px, calc(100% - 40px));
         height: 100%;
         justify-content: flex-start;
         align-items: center;
@@ -1421,10 +1421,10 @@ footer {
         width: 100%;
         min-height: 70px;
         height: 70px;
-        padding: 0 max(30px, calc((100% - 1180px) / 2));
+        padding: 0 max(20px, calc((100% - 1000px) / 2));
         display: flex;
         align-items: stretch;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 0;
         background: #080719;
         border-top: 1px solid rgba(255,255,255,.1);
@@ -1433,17 +1433,17 @@ footer {
 
     .site-nav a {
         position: relative;
-        min-width: 150px;
+        min-width: 0;
         height: 70px;
-        padding: 0 28px;
+        padding: 0 26px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0;
+        gap: 10px;
         color: #fff;
         background: transparent;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 700;
         white-space: nowrap;
     }
