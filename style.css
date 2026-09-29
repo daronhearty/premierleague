@@ -1506,12 +1506,12 @@ footer {
    ===================================================== */
 
 .nav-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 32px;
+    flex: 0 0 28px;
     color: currentColor;
 }
 
