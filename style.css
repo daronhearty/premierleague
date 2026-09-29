@@ -1348,9 +1348,8 @@ footer {
 
         /* CSS fallback + original artwork */
         background:
-            radial-gradient(circle at 78% 18%, rgba(50, 239, 184, .18) 0, rgba(50, 239, 184, 0) 24%),
-            radial-gradient(circle at 18% 70%, rgba(111, 32, 255, .32) 0, rgba(111, 32, 255, 0) 34%),
-            linear-gradient(135deg, #09051b 0%, #260b3d 48%, #4c1c63 100%);
+            linear-gradient(90deg, rgba(5, 4, 22, .16), rgba(5, 4, 22, .04)),
+            url("assets/header-bg.svg") center center / cover no-repeat;
     }
 
     /* Abstract stadium/floodlight atmosphere */
@@ -1491,8 +1490,8 @@ footer {
 @media (max-width: 700px) {
     .site-hero {
         background:
-            radial-gradient(circle at 82% 18%, rgba(50, 239, 184, .18) 0, rgba(50, 239, 184, 0) 30%),
-            linear-gradient(145deg, #09051b 0%, #260b3d 55%, #4c1c63 100%);
+            linear-gradient(90deg, rgba(5, 4, 22, .18), rgba(5, 4, 22, .04)),
+            url("assets/header-bg.svg") center center / cover no-repeat;
     }
 
     .site-nav a.active {
