@@ -1033,3 +1033,85 @@ footer {
         font-size: 12px;
     }
 }
+
+
+/* =====================================================
+   TEAM BADGE PICKER
+   ===================================================== */
+
+.team-badge-picker {
+    margin-top: 22px;
+}
+
+.team-badge-label {
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #6b7280;
+}
+
+.team-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 500px;
+}
+
+.team-badge {
+    min-height: 88px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    color: #111827;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+}
+
+.team-badge:hover {
+    border-color: #37003c;
+}
+
+.team-badge:focus-visible {
+    outline: 3px solid #37003c;
+    outline-offset: 2px;
+}
+
+.team-badge img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.team-badge span {
+    text-align: left;
+}
+
+.team-badges.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .team-badges {
+        max-width: none;
+        gap: 10px;
+    }
+
+    .team-badge {
+        min-height: 82px;
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .team-badge img {
+        width: 40px;
+        height: 40px;
+    }
+}
