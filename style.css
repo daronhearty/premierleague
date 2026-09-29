@@ -1063,9 +1063,9 @@ footer {
     background: white;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 10px 18px;
     cursor: pointer;
     font-family: inherit;
     font-size: 14px;
@@ -1084,14 +1084,15 @@ footer {
 }
 
 .team-badge img {
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
     object-fit: contain;
     flex-shrink: 0;
 }
 
 .team-badge span {
     text-align: left;
+    flex: 1;
 }
 
 .team-badges.hidden {
@@ -1106,12 +1107,13 @@ footer {
 
     .team-badge {
         min-height: 82px;
-        padding: 8px;
+        padding: 8px 14px;
+        gap: 12px;
         font-size: 13px;
     }
 
     .team-badge img {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
     }
 }
