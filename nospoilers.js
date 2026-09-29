@@ -4,6 +4,29 @@ const API_URL =
 
 let allMatches = [];
 
+const TEAM_BADGES = [
+    { id: 57, name: "Arsenal", crest: "https://crests.football-data.org/57.png" },
+    { id: 58, name: "Aston Villa", crest: "https://crests.football-data.org/58.png" },
+    { id: 1044, name: "Bournemouth", crest: "https://crests.football-data.org/1044.png" },
+    { id: 337, name: "Brentford", crest: "https://crests.football-data.org/337.png" },
+    { id: 397, name: "Brighton", crest: "https://crests.football-data.org/397.png" },
+    { id: 328, name: "Burnley", crest: "https://crests.football-data.org/328.png" },
+    { id: 61, name: "Chelsea", crest: "https://crests.football-data.org/61.png" },
+    { id: 354, name: "Crystal Palace", crest: "https://crests.football-data.org/354.png" },
+    { id: 62, name: "Everton", crest: "https://crests.football-data.org/62.png" },
+    { id: 63, name: "Fulham", crest: "https://crests.football-data.org/63.png" },
+    { id: 341, name: "Leeds United", crest: "https://crests.football-data.org/341.png" },
+    { id: 64, name: "Liverpool", crest: "https://crests.football-data.org/64.png" },
+    { id: 65, name: "Manchester City", crest: "https://crests.football-data.org/65.png" },
+    { id: 66, name: "Manchester United", crest: "https://crests.football-data.org/66.png" },
+    { id: 67, name: "Newcastle United", crest: "https://crests.football-data.org/67.png" },
+    { id: 351, name: "Nottingham Forest", crest: "https://crests.football-data.org/351.png" },
+    { id: 71, name: "Sunderland", crest: "https://crests.football-data.org/71.png" },
+    { id: 73, name: "Tottenham Hotspur", crest: "https://crests.football-data.org/73.png" },
+    { id: 563, name: "West Ham United", crest: "https://crests.football-data.org/563.png" },
+    { id: 76, name: "Wolverhampton Wanderers", crest: "https://crests.football-data.org/76.png" }
+];
+
 let allTeams = [];
 
 const teamSelect =
@@ -59,6 +82,8 @@ function buildTeamList() {
 
 
     populateTeamSelector();
+    populateTeamBadges();
+    updateBadgePicker();
 
 }
 
@@ -121,6 +146,43 @@ function populateTeamSelector() {
 
     }
 
+}
+
+
+
+function populateTeamBadges() {
+    const container = document.getElementById("team-badges");
+
+    container.innerHTML = TEAM_BADGES.map(team => `
+        <button class="team-badge" type="button" data-team-id="${team.id}" aria-label="Select ${team.name}">
+            <img src="${team.crest}" alt="" width="44" height="44">
+            <span>${team.name}</span>
+        </button>
+    `).join("");
+
+    container.querySelectorAll(".team-badge").forEach(button => {
+        button.addEventListener("click", () => {
+            selectTeam(button.dataset.teamId);
+        });
+    });
+}
+
+function selectTeam(teamId) {
+    localStorage.setItem("selectedPremierLeagueTeam", String(teamId));
+    teamSelect.value = String(teamId);
+    document.getElementById("team-badges").classList.add("hidden");
+    updatePage();
+}
+
+function updateBadgePicker() {
+    const selectedTeam = getSelectedTeam();
+    const container = document.getElementById("team-badges");
+
+    if (selectedTeam) {
+        container.classList.add("hidden");
+    } else {
+        container.classList.remove("hidden");
+    }
 }
 
 
