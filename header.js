@@ -4,6 +4,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!menuButton || !nav) return;
 
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+    nav.querySelectorAll("a").forEach(link => {
+        const linkPage = link.getAttribute("href");
+        const isActive = linkPage === currentPage;
+        link.classList.toggle("active", isActive);
+        if (isActive) {
+            link.setAttribute("aria-current", "page");
+        }
+    });
+
     menuButton.addEventListener("click", () => {
         const open = nav.classList.toggle("is-open");
         menuButton.setAttribute("aria-expanded", String(open));
