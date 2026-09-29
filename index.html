@@ -14,14 +14,22 @@
 
 <body>
 
-<header>
-    <h1>Premier League Tracker</h1>
-
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="latest.html">Latest</a>
-        <a href="table.html">Table</a>
-        <a href="arsenal.html">Arsenal</a>
+<header class="site-header">
+    <div class="site-hero">
+        <div class="site-brand">
+            <a href="index.html" class="brand-link" aria-label="No Spoilers! Premier League home">
+                <img src="assets/logo.svg" alt="No Spoilers! Premier League">
+            </a>
+            <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+    <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html"><span class="nav-icon">⌂</span><span>Home</span></a>
+        <a href="latest.html"><span class="nav-icon">◉</span><span>Latest</span></a>
+        <a href="table.html"><span class="nav-icon">▥</span><span>Table</span></a>
+        <a href="arsenal.html"><span class="nav-icon">◆</span><span>Arsenal</span></a>
     </nav>
 </header>
 
@@ -92,7 +100,8 @@
     <p>Football data provided by the Football-Data.org API</p>
 </footer>
 
-<script src="nospoilers.js"></script>
+<script src="header.js"></script>
+    <script src="nospoilers.js"></script>
 
 </body>
 
