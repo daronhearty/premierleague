@@ -1306,3 +1306,27 @@ footer {
         height: 44px;
     }
 }
+
+
+/* Active page state */
+.site-nav a.active {
+    color: #32efb8;
+}
+.site-nav a.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 18px;
+    right: 18px;
+    height: 4px;
+    border-radius: 4px 4px 0 0;
+    background: #32efb8;
+}
+@media (max-width: 700px) {
+    .site-nav a.active {
+        background: rgba(50,239,184,.08);
+    }
+    .site-nav a.active::after {
+        display: none;
+    }
+}
