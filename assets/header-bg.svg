@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 420" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#09051b"/><stop offset=".48" stop-color="#24104d"/><stop offset="1" stop-color="#5a2b7e"/>
+  </linearGradient>
+  <radialGradient id="glow" cx=".72" cy=".1" r=".75">
+    <stop offset="0" stop-color="#d85cff" stop-opacity=".55"/><stop offset=".5" stop-color="#6333b7" stop-opacity=".16"/><stop offset="1" stop-color="#0a061c" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="pitch" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#11102e" stop-opacity=".15"/><stop offset="1" stop-color="#060817" stop-opacity=".95"/>
+  </linearGradient>
+</defs>
+<rect width="1600" height="420" fill="url(#sky)"/>
+<rect width="1600" height="420" fill="url(#glow)"/>
+<!-- stadium roof -->
+<path d="M520 0 Q800 310 1080 0 L1600 0 L1600 175 Q1260 105 800 120 Q340 105 0 175 L0 0Z" fill="#07051a" opacity=".72"/>
+<path d="M0 175 Q360 80 800 100 Q1240 80 1600 175 L1600 205 Q1240 125 800 145 Q360 125 0 205Z" fill="#15103b"/>
+<!-- floodlights -->
+<g fill="#ffffff" opacity=".9">
+ <circle cx="105" cy="128" r="5"/><circle cx="140" cy="118" r="4"/><circle cx="1490" cy="118" r="5"/><circle cx="1525" cy="128" r="4"/>
+ <circle cx="300" cy="96" r="4"/><circle cx="1300" cy="96" r="4"/>
+</g>
+<!-- abstract pitch/crowd -->
+<path d="M0 210 Q400 155 800 185 Q1200 155 1600 210 L1600 420 L0 420Z" fill="url(#pitch)"/>
+<path d="M0 350 Q400 285 800 315 Q1200 285 1600 350 L1600 420 L0 420Z" fill="#08091b" opacity=".8"/>
+<!-- brand accents -->
+<path d="M0 0 L150 0 L300 420 L190 420Z" fill="#651cff" opacity=".55"/>
+<path d="M0 0 L70 0 L215 420 L150 420Z" fill="#31f0bd" opacity=".85"/>
+<path d="M1600 0 L1500 0 L1370 420 L1480 420Z" fill="#6d20ff" opacity=".4"/>
+</svg>
