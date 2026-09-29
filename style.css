@@ -550,6 +550,10 @@ footer {
    TEAM SELECTOR
    ===================================================== */
 
+.team-selector.hidden {
+    display: none;
+}
+
 .team-selector {
     display: flex;
     align-items: center;
