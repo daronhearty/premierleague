@@ -8,7 +8,7 @@ const TEAM_BADGES = [
     { id: 57, name: "Arsenal", crest: "https://crests.football-data.org/57.png" },
     { id: 58, name: "Aston Villa", crest: "https://crests.football-data.org/58.png" },
     { id: 1044, name: "Bournemouth", crest: "https://crests.football-data.org/1044.png" },
-    { id: 337, name: "Brentford", crest: "https://crests.football-data.org/337.png" },
+    { id: 402, name: "Brentford", crest: "https://crests.football-data.org/402.png" },
     { id: 397, name: "Brighton", crest: "https://crests.football-data.org/397.png" },
     { id: 328, name: "Burnley", crest: "https://crests.football-data.org/328.png" },
     { id: 61, name: "Chelsea", crest: "https://crests.football-data.org/61.png" },
@@ -160,9 +160,20 @@ function populateTeamBadges() {
 
 function selectTeam(teamId) {
     localStorage.setItem("selectedPremierLeagueTeam", String(teamId));
-    teamSelect.value = "";
-    document.getElementById("team-badges").classList.add("hidden");
+    teamSelect.value = String(teamId);
+    updateTeamSelector();
     updatePage();
+}
+
+function updateTeamSelector() {
+    const selectedTeam = getSelectedTeam();
+    const selector = document.querySelector(".team-selector");
+
+    if (selectedTeam) {
+        selector.classList.remove("hidden");
+    } else {
+        selector.classList.add("hidden");
+    }
 }
 
 function updateBadgePicker() {
@@ -543,7 +554,8 @@ teamSelect.addEventListener(
 
         }
 
-
+        updateTeamSelector();
+        updateBadgePicker();
         updatePage();
 
     }
