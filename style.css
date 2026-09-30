@@ -1140,7 +1140,7 @@ footer {
     min-height: 245px;
     background:
         linear-gradient(90deg, rgba(7,4,25,.18), rgba(7,4,25,.08)),
-        url("assets/header-bg.svg") center center / cover no-repeat;
+        url("assets/banner.png") center center / cover no-repeat;
     display: flex;
     align-items: center;
 }
@@ -1349,7 +1349,7 @@ footer {
         /* CSS fallback + original artwork */
         background:
             linear-gradient(90deg, rgba(5, 4, 22, .16), rgba(5, 4, 22, .04)),
-            url("assets/header-bg.svg") center center / cover no-repeat;
+            url("assets/banner.png") center center / cover no-repeat;
     }
 
     /* Abstract stadium/floodlight atmosphere */
@@ -1491,7 +1491,7 @@ footer {
     .site-hero {
         background:
             linear-gradient(90deg, rgba(5, 4, 22, .18), rgba(5, 4, 22, .04)),
-            url("assets/header-bg.svg") center center / cover no-repeat;
+            url("assets/banner.png") center center / cover no-repeat;
     }
 
     .site-nav a.active {
