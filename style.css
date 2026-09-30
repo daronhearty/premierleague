@@ -565,7 +565,8 @@ footer {
     font-size: 16px;
 }
 
-#team-select {
+#team-select,
+#my-club-team-select {
     font-family: inherit;
     font-size: 16px;
     padding: 8px 36px 8px 12px;
@@ -615,7 +616,8 @@ footer {
         font-size: 18px;
     }
 
-    #team-select {
+    #team-select,
+    #my-club-team-select {
         font-size: 17px;
         padding: 9px 36px 9px 12px;
         min-height: 44px;
