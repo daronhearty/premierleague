@@ -555,14 +555,17 @@ footer {
 }
 
 .team-selector {
-    display: flex;
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
     align-items: center;
     gap: 12px;
+    width: min(100%, 620px);
     margin-top: 8px;
 }
 
 .team-selector label {
     font-size: 16px;
+    white-space: nowrap;
 }
 
 #team-select,
@@ -581,7 +584,7 @@ footer {
 }
 
 .my-club-team-selector {
-    width: 100%;
+    width: min(100%, 620px);
 }
 
 /* =====================================================
@@ -615,12 +618,15 @@ footer {
         font-size: 15px;
     }
     .team-selector {
+        grid-template-columns: 68px minmax(0, 1fr);
         gap: 10px;
+        width: 100%;
         margin-top: 10px;
     }
 
     .team-selector label {
-        font-size: 18px;
+        font-size: 17px;
+        white-space: nowrap;
     }
 
     #team-select,
