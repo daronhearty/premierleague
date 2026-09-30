@@ -1584,3 +1584,44 @@ footer p + p::before {
         padding: 0 2px;
     }
 }
+
+
+/* =====================================================
+   SYMMETRICAL MATCH CARD LAYOUT
+   ===================================================== */
+
+/* Keep the score/time in the exact centre.
+   Home: name -> crest -> centre
+   Away: centre -> crest -> name */
+
+.match .home span {
+    order: 1;
+}
+
+.match .home img {
+    order: 2;
+}
+
+.match .away img {
+    order: 1;
+}
+
+.match .away span {
+    order: 2;
+}
+
+.arsenal-feature-match .feature-team:first-child strong {
+    order: 1;
+}
+
+.arsenal-feature-match .feature-team:first-child img {
+    order: 2;
+}
+
+.arsenal-feature-match .feature-team:last-child img {
+    order: 1;
+}
+
+.arsenal-feature-match .feature-team:last-child strong {
+    order: 2;
+}
