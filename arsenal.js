@@ -28,6 +28,8 @@ let allMatches = [];
 
 const badges = document.getElementById("my-club-team-badges");
 const content = document.getElementById("my-club-content");
+const select = document.getElementById("my-club-team-select");
+const selector = document.querySelector(".my-club-team-selector");
 
 function formatDate(dateString) {
     return new Date(dateString).toLocaleString("en-IE", {
@@ -58,6 +60,22 @@ function setSelectedTeam(id) {
 }
 
 function buildSelector() {
+    select.innerHTML = '<option value="">Select your team...</option>';
+
+    TEAM_BADGES
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .forEach(team => {
+            const option = document.createElement("option");
+            option.value = team.id;
+            option.textContent = team.name;
+            select.appendChild(option);
+        });
+
+    select.addEventListener("change", () => {
+        if (select.value) setSelectedTeam(select.value);
+    });
+
     badges.innerHTML = TEAM_BADGES.map(team => `
         <button class="team-badge" type="button" data-team-id="${team.id}" aria-label="Select ${team.name}">
             <img src="${team.crest}" alt="" width="44" height="44">
@@ -80,12 +98,15 @@ function showSelectedTeam() {
 
     if (!team) {
         content.classList.add("hidden");
+        selector.classList.add("hidden");
         badges.classList.remove("hidden");
  
         return;
     }
 
     badges.classList.add("hidden");
+    selector.classList.remove("hidden");
+    select.value = String(team.id);
     content.classList.remove("hidden");
 
     document.getElementById("my-club-crest").src = team.crest;
