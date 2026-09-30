@@ -26,7 +26,6 @@ const TEAM_BADGES = [
 
 let allMatches = [];
 
-const select = document.getElementById("my-club-team-select");
 const badges = document.getElementById("my-club-team-badges");
 const content = document.getElementById("my-club-content");
 
@@ -55,23 +54,10 @@ function getSelectedTeam() {
 
 function setSelectedTeam(id) {
     localStorage.setItem("selectedPremierLeagueTeam", String(id));
-    select.value = String(id);
     showSelectedTeam();
 }
 
 function buildSelector() {
-    select.innerHTML = '<option value="">Select your team...</option>';
-
-    TEAM_BADGES
-        .slice()
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .forEach(team => {
-            const option = document.createElement("option");
-            option.value = team.id;
-            option.textContent = team.name;
-            select.appendChild(option);
-        });
-
     badges.innerHTML = TEAM_BADGES.map(team => `
         <button class="team-badge" type="button" data-team-id="${team.id}" aria-label="Select ${team.name}">
             <img src="${team.crest}" alt="" width="44" height="44">
@@ -81,12 +67,6 @@ function buildSelector() {
 
     badges.querySelectorAll(".team-badge").forEach(button => {
         button.addEventListener("click", () => setSelectedTeam(button.dataset.teamId));
-    });
-
-    select.addEventListener("change", () => {
-        if (select.value) {
-            setSelectedTeam(select.value);
-        }
     });
 }
 
@@ -101,11 +81,10 @@ function showSelectedTeam() {
     if (!team) {
         content.classList.add("hidden");
         badges.classList.remove("hidden");
-        select.value = "";
+ 
         return;
     }
 
-    select.value = String(team.id);
     badges.classList.add("hidden");
     content.classList.remove("hidden");
 
