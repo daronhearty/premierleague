@@ -567,6 +567,9 @@ footer {
 
 #team-select,
 #my-club-team-select {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
     font-family: inherit;
     font-size: 16px;
     padding: 8px 36px 8px 12px;
@@ -575,6 +578,10 @@ footer {
     border-radius: 8px;
     background: white;
     box-sizing: border-box;
+}
+
+.my-club-team-selector {
+    width: 100%;
 }
 
 /* =====================================================
