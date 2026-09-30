@@ -1625,3 +1625,9 @@ footer p + p::before {
 .arsenal-feature-match .feature-team:last-child strong {
     order: 2;
 }
+
+
+/* My Club content is revealed after a team is selected */
+.my-club-content.hidden {
+    display: none;
+}
