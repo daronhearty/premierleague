@@ -64,6 +64,116 @@ function formatDate(dateString) {
 
 
 // -----------------------------
+// FORMAT GOAL TIME
+// -----------------------------
+
+function formatGoalMinute(goal) {
+
+    const minute = goal?.minute;
+
+    if (minute === null || minute === undefined) {
+        return "";
+    }
+
+    const injuryTime = goal?.injuryTime;
+
+    return injuryTime
+        ? `${minute}+${injuryTime}'`
+        : `${minute}'`;
+}
+
+
+// -----------------------------
+// GET GOAL SCORER NAME
+// -----------------------------
+
+function getScorerName(goal) {
+
+    return (
+        goal?.scorer?.name ||
+        goal?.scorer?.shortName ||
+        goal?.player?.name ||
+        "Unknown scorer"
+    );
+}
+
+
+// -----------------------------
+// MATCH EVENTS / GOAL TIMELINE
+// -----------------------------
+
+function getMatchGoals(match) {
+
+    if (!Array.isArray(match.goals)) {
+        return [];
+    }
+
+    return [...match.goals].sort((a, b) => {
+
+        const aMinute = Number(a?.minute ?? 0);
+        const bMinute = Number(b?.minute ?? 0);
+
+        const aInjury = Number(a?.injuryTime ?? 0);
+        const bInjury = Number(b?.injuryTime ?? 0);
+
+        return (aMinute + aInjury / 100) - (bMinute + bInjury / 100);
+    });
+}
+
+
+function createGoalTimeline(match) {
+
+    const goals = getMatchGoals(match);
+
+    if (goals.length === 0) {
+
+        const message = match.status === "FINISHED"
+            ? "No goals were scored in this match."
+            : "No goals have been scored yet.";
+
+        return `
+            <div class="match-no-goals">
+                <span>${message}</span>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="goal-timeline" aria-label="Goal timeline">
+            ${goals.map(goal => {
+
+                const scorer = getScorerName(goal);
+                const minute = formatGoalMinute(goal);
+                const teamId = goal?.team?.id;
+                const homeId = match.homeTeam?.id;
+                const isHomeGoal = teamId !== undefined && teamId === homeId;
+
+                const goalType = goal?.type === "OWN_GOAL"
+                    ? "Own goal"
+                    : goal?.type === "PENALTY"
+                        ? "Penalty"
+                        : "";
+
+                return `
+                    <div class="goal-event ${isHomeGoal ? "home-goal" : "away-goal"}">
+
+                        <div class="goal-event-content">
+                            <span class="goal-minute">${minute}</span>
+                            <span class="goal-icon" aria-hidden="true">⚽</span>
+                            <span class="goal-scorer">${scorer}</span>
+                            ${goalType ? `<span class="goal-type">${goalType}</span>` : ""}
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")}
+        </div>
+    `;
+}
+
+
+// -----------------------------
 // MATCH CARD
 // -----------------------------
 
@@ -84,31 +194,130 @@ function createMatchCard(match) {
         awayScore !== null &&
         awayScore !== undefined;
 
+    const isLive = [
+        "LIVE",
+        "IN_PLAY",
+        "PAUSED"
+    ].includes(match.status);
+
+    const isExpandable = isPlayed || isLive;
+
     const score = isPlayed
         ? `${homeScore} - ${awayScore}`
         : "vs";
 
+    const wrapperClass = isExpandable
+        ? "match-wrapper match-wrapper-expandable"
+        : "match-wrapper";
+
     return `
-        <div class="match">
+        <div class="${wrapperClass}">
 
-            <div class="team home">
-                ${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}
-                <span>${homeTeam}</span>
+            <div
+                class="match${isExpandable ? " match-expandable" : ""}"
+                ${isExpandable ? `data-match-id="${match.id}" tabindex="0" role="button" aria-expanded="false" aria-label="Show goals for ${homeTeam} versus ${awayTeam}"` : ""}
+            >
+
+                <div class="team home">
+                    ${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}
+                    <span>${homeTeam}</span>
+                </div>
+
+                <div class="score">
+                    <strong>${score}</strong>
+                    <small>${formatDate(match.utcDate)}</small>
+                </div>
+
+                <div class="team away">
+                    ${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}
+                    <span>${awayTeam}</span>
+                </div>
+
             </div>
 
-            <div class="score">
-                <strong>${score}</strong>
-                <small>${formatDate(match.utcDate)}</small>
-            </div>
-
-            <div class="team away">
-                ${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}
-                <span>${awayTeam}</span>
-            </div>
+            ${isExpandable ? `
+                <div class="match-details" aria-hidden="true">
+                    <div class="match-details-inner">
+                        ${createGoalTimeline(match)}
+                    </div>
+                </div>
+            ` : ""}
 
         </div>
     `;
 }
+
+
+// -----------------------------
+// MATCH CARD INTERACTION
+// -----------------------------
+
+function closeExpandedMatch(exceptMatch = null) {
+
+    document.querySelectorAll(".match-expandable.expanded").forEach(match => {
+
+        if (match === exceptMatch) {
+            return;
+        }
+
+        match.classList.remove("expanded");
+        match.setAttribute("aria-expanded", "false");
+
+        const details = match.parentElement?.querySelector(".match-details");
+
+        if (details) {
+            details.setAttribute("aria-hidden", "true");
+        }
+    });
+}
+
+
+function toggleMatch(matchElement) {
+
+    const isExpanded = matchElement.classList.contains("expanded");
+
+    closeExpandedMatch(matchElement);
+
+    matchElement.classList.toggle("expanded", !isExpanded);
+    matchElement.setAttribute("aria-expanded", String(!isExpanded));
+
+    const details = matchElement.parentElement?.querySelector(".match-details");
+
+    if (details) {
+        details.setAttribute("aria-hidden", String(isExpanded));
+    }
+}
+
+
+function handleMatchInteraction(event) {
+
+    const matchElement = event.target.closest(".match-expandable");
+
+    if (!matchElement) {
+        return;
+    }
+
+    toggleMatch(matchElement);
+}
+
+
+document.addEventListener("click", handleMatchInteraction);
+
+document.addEventListener("keydown", event => {
+
+    if (event.key !== "Enter" && event.key !== " ") {
+        return;
+    }
+
+    const matchElement = event.target.closest(".match-expandable");
+
+    if (!matchElement) {
+        return;
+    }
+
+    event.preventDefault();
+    toggleMatch(matchElement);
+});
 
 
 // -----------------------------
