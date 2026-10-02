@@ -1646,3 +1646,243 @@ footer p + p::before {
 .my-club-content.hidden {
     display: none;
 }
+
+
+
+/* =====================================================
+   EXPANDABLE MATCHES + GOAL TIMELINE
+   ===================================================== */
+
+.match-wrapper {
+    width: 100%;
+}
+
+.match-wrapper-expandable {
+    cursor: pointer;
+}
+
+.match-expandable {
+    position: relative;
+    outline: none;
+}
+
+.match-expandable:focus-visible {
+    box-shadow:
+        0 0 0 3px rgba(50, 239, 184, .45),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.match-expandable::after {
+    content: "›";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    color: #9ca3af;
+    font-size: 18px;
+    font-weight: normal;
+    transition: transform .2s ease, color .2s ease;
+}
+
+.match-expandable.expanded::after {
+    transform: translateY(-50%) rotate(-90deg);
+    color: #37003c;
+}
+
+.match-details {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .25s ease;
+    background: white;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+
+.match-details-inner {
+    min-height: 0;
+    overflow: hidden;
+    border-top: 1px solid transparent;
+}
+
+.match-expandable.expanded + .match-details {
+    grid-template-rows: 1fr;
+    border-top: 1px solid #e5e7eb;
+}
+
+.match-expandable.expanded {
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.match-expandable.expanded + .match-details .match-details-inner {
+    padding: 24px 24px 26px;
+}
+
+
+/* Goal timeline */
+
+.goal-timeline {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.goal-timeline::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    bottom: 7px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #e5e7eb;
+}
+
+.goal-event {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 32px;
+}
+
+.goal-event::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #37003c;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #d1d5db;
+    z-index: 1;
+}
+
+.goal-event-content {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    font-size: 13px;
+}
+
+.home-goal .goal-event-content {
+    grid-column: 1;
+    justify-content: flex-end;
+    padding-right: 24px;
+    text-align: right;
+}
+
+.away-goal .goal-event-content {
+    grid-column: 2;
+    justify-content: flex-start;
+    padding-left: 24px;
+    text-align: left;
+}
+
+.goal-minute {
+    color: #6b7280;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.goal-icon {
+    font-size: 15px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.goal-scorer {
+    font-weight: bold;
+    color: #111827;
+    min-width: 0;
+}
+
+.goal-type {
+    color: #6b7280;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.match-no-goals {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* Mobile goal timeline */
+
+@media (max-width: 600px) {
+
+    .match-expandable::after {
+        right: 5px;
+    }
+
+    .match-expandable.expanded + .match-details .match-details-inner {
+        padding: 20px 8px 22px;
+    }
+
+    .goal-timeline {
+        gap: 14px;
+    }
+
+    .goal-event-content {
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .home-goal .goal-event-content {
+        padding-right: 18px;
+    }
+
+    .away-goal .goal-event-content {
+        padding-left: 18px;
+    }
+
+    .goal-icon {
+        font-size: 14px;
+    }
+
+    .goal-type {
+        display: none;
+    }
+}
+
+
+@media (max-width: 380px) {
+
+    .match-expandable.expanded + .match-details .match-details-inner {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .goal-event-content {
+        font-size: 11px;
+    }
+
+    .home-goal .goal-event-content {
+        padding-right: 14px;
+    }
+
+    .away-goal .goal-event-content {
+        padding-left: 14px;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .match-details,
+    .match-expandable::after {
+        transition: none;
+    }
+}
