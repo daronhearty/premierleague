@@ -271,10 +271,21 @@ function getScorerName(goal) {
 
 function getMatchGoals(match) {
     if (!Array.isArray(match.goals)) return null;
-    return [...match.goals].sort((a, b) =>
-        (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100) -
-        (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100)
-    );
+
+    // Some event feeds can include records for a different fixture. Only show
+    // goals explicitly attributed to one of the two teams in this match.
+    const homeId = match.homeTeam?.id;
+    const awayId = match.awayTeam?.id;
+    return match.goals
+        .filter(goal => {
+            const teamId = goal?.team?.id;
+            if (teamId === null || teamId === undefined) return false;
+            return String(teamId) === String(homeId) || String(teamId) === String(awayId);
+        })
+        .sort((a, b) =>
+            (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100) -
+            (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100)
+        );
 }
 
 function createGoalTimeline(match) {
