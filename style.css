@@ -1900,3 +1900,71 @@ footer p + p::before {
         font-size: 10px;
     }
 }
+
+
+/* =====================================================
+   MOBILE GOAL TIMELINE — USE THE AVAILABLE WIDTH
+   ===================================================== */
+
+@media (max-width: 600px) {
+    .goal-timeline::before {
+        left: 8px;
+        transform: none;
+    }
+
+    .goal-event {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 30px;
+    }
+
+    .goal-event::before {
+        left: 8px;
+    }
+
+    .goal-event-content,
+    .home-goal .goal-event-content,
+    .away-goal .goal-event-content {
+        grid-column: 1;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 2px 0 2px 24px;
+        flex-wrap: wrap;
+        row-gap: 3px;
+        overflow-wrap: anywhere;
+    }
+
+    .goal-minute,
+    .goal-icon {
+        flex-shrink: 0;
+    }
+
+    .goal-scorer {
+        overflow-wrap: anywhere;
+    }
+
+    .goal-assist {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 11px;
+    }
+
+    .goal-type {
+        display: inline;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 380px) {
+    .goal-event-content,
+    .home-goal .goal-event-content,
+    .away-goal .goal-event-content {
+        padding-left: 23px;
+        padding-right: 2px;
+        font-size: 12px;
+    }
+
+    .goal-assist,
+    .goal-type {
+        font-size: 10px;
+    }
+}
