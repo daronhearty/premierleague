@@ -1968,3 +1968,77 @@ footer p + p::before {
         font-size: 10px;
     }
 }
+
+
+/* Identify the scoring team clearly in the mobile timeline */
+.goal-team-label {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .goal-timeline::before {
+        left: 8px;
+        transform: none;
+    }
+
+    .goal-event {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 30px;
+    }
+
+    .goal-event::before {
+        left: 8px;
+    }
+
+    .goal-event-content,
+    .home-goal .goal-event-content,
+    .away-goal .goal-event-content {
+        grid-column: 1;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 2px 0 2px 24px;
+        flex-wrap: wrap;
+        row-gap: 4px;
+        overflow-wrap: anywhere;
+        font-size: 13px;
+    }
+
+    .goal-team-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: #f3e8f5;
+        color: #5b2160;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .goal-assist {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 11px;
+    }
+
+    .goal-type {
+        display: inline;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 380px) {
+    .goal-event-content,
+    .home-goal .goal-event-content,
+    .away-goal .goal-event-content {
+        padding-left: 23px;
+        padding-right: 2px;
+        font-size: 12px;
+    }
+
+    .goal-assist,
+    .goal-type {
+        font-size: 10px;
+    }
+}
