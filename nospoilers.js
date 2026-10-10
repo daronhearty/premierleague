@@ -616,7 +616,7 @@ async function loadMatches(forceRefresh = false) {
 
 
         updatePage();
-
+        return true;
 
     } catch (error) {
 
@@ -636,6 +636,7 @@ async function loadMatches(forceRefresh = false) {
             "latest-results"
         ).innerHTML =
             '<p class="loading">Unable to load results.</p>';
+        return false;
 
     }
 
@@ -657,8 +658,8 @@ if (refreshButton) {
         refreshButton.innerHTML = '<span aria-hidden="true">↻</span> Refreshing…';
         if (refreshStatus) refreshStatus.textContent = "Fetching the latest match data…";
         try {
-            await loadMatches(true);
-            if (refreshStatus) refreshStatus.textContent = "Data refreshed just now.";
+            const refreshed = await loadMatches(true);
+            if (refreshStatus) refreshStatus.textContent = refreshed ? "Data refreshed just now." : "Refresh failed. Please try again shortly.";
         } catch (error) {
             if (refreshStatus) refreshStatus.textContent = "Refresh failed. Please try again shortly.";
         } finally {
