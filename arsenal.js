@@ -1,13 +1,9 @@
-const API_URL =
-    "https://premier-league-api.daronhearty.workers.dev/?endpoint=competitions/PL/matches";
-
 const TEAM_BADGES = [
     { id: 57, name: "Arsenal", crest: "https://crests.football-data.org/57.png" },
     { id: 58, name: "Aston Villa", crest: "https://crests.football-data.org/58.png" },
     { id: 1044, name: "Bournemouth", crest: "https://crests.football-data.org/1044.png" },
     { id: 402, name: "Brentford", crest: "https://crests.football-data.org/402.png" },
     { id: 397, name: "Brighton", crest: "https://crests.football-data.org/397.png" },
-    { id: 328, name: "Burnley", crest: "https://crests.football-data.org/328.png" },
     { id: 61, name: "Chelsea", crest: "https://crests.football-data.org/61.png" },
     { id: 354, name: "Crystal Palace", crest: "https://crests.football-data.org/354.png" },
     { id: 62, name: "Everton", crest: "https://crests.football-data.org/62.png" },
@@ -20,8 +16,9 @@ const TEAM_BADGES = [
     { id: 351, name: "Nottingham Forest", crest: "https://crests.football-data.org/351.png" },
     { id: 71, name: "Sunderland", crest: "https://crests.football-data.org/71.png" },
     { id: 73, name: "Tottenham Hotspur", crest: "https://crests.football-data.org/73.png" },
-    { id: 563, name: "West Ham United", crest: "https://crests.football-data.org/563.png" },
-    { id: 76, name: "Wolverhampton Wanderers", crest: "https://crests.football-data.org/76.png" }
+    { id: 349, name: "Ipswich Town", crest: "https://api.bigballsdata.com/v1/assets/aA_ZJyJSavLBDZxcDgEJn4pNqwqWXiLR8aVMohPMeiWQUVq32eLLIrC4tqmG_PgpiNd-xJApwKaUaGBdHAlZESC8aJY" },
+    { id: 322, name: "Hull City", crest: "https://api.bigballsdata.com/v1/assets/JnNFfB1nlbrq18pKBXkLj9WHSSgocLwJx__YXlUiLUz_j8k28a4dX4aoWPRhBVyc1vscXn6v0uFJIGFDtgSWEhrqQZ7nxRlYpTRlYmKaqLc" },
+    { id: 1076, name: "Coventry City", crest: "https://api.bigballsdata.com/v1/assets/o32rgc66eOVAOmNYd5z-QEaNlmlvNYqOIlWFHwTilkJSyFc14TCHbmXgq3MV2VQFhJFSe7LQy78Hiv3nKD9ZUcOInqP8" }
 ];
 
 let allMatches = [];
@@ -159,34 +156,76 @@ function createMatchCard(match) {
     const awayName = getTeamName(match.awayTeam);
     const homeCrest = getTeamCrest(match.homeTeam);
     const awayCrest = getTeamCrest(match.awayTeam);
-
     const homeScore = match.score?.fullTime?.home;
     const awayScore = match.score?.fullTime?.away;
-
     const isFinished = match.status === "FINISHED";
-    const score = isFinished && homeScore !== null && awayScore !== null
-        ? `${homeScore} - ${awayScore}`
-        : "vs";
-
+    const score = isFinished && homeScore !== null && awayScore !== null ? `${homeScore} - ${awayScore}` : "vs";
+    const expandable = isFinished || ["IN_PLAY", "PAUSED"].includes(match.status);
     return `
-        <div class="match">
-            <div class="team home">
-                ${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}
-                <span>${homeName}</span>
+        <div class="match-wrapper${expandable ? " match-wrapper-expandable" : ""}">
+            <div class="match${expandable ? " match-expandable" : ""}" ${expandable ? `data-match-id="${match.id}" tabindex="0" role="button" aria-expanded="false" aria-label="Show goals for ${homeName} versus ${awayName}"` : ""}>
+                <div class="team home">${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}<span>${homeName}</span></div>
+                <div class="score"><strong>${score}</strong><small>${formatDate(match.utcDate)}</small></div>
+                <div class="team away"><span>${awayName}</span>${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}</div>
             </div>
-
-            <div class="score">
-                <strong>${score}</strong>
-                <small>${formatDate(match.utcDate)}</small>
-            </div>
-
-            <div class="team away">
-                <span>${awayName}</span>
-                ${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}
-            </div>
+            ${expandable ? `<div class="match-details" aria-hidden="true"><div class="match-details-inner">${createGoalTimeline(match)}</div></div>` : ""}
         </div>
     `;
 }
+
+function createGoalTimeline(match) {
+    if (!Array.isArray(match.goals)) return '<div class="match-no-goals"><span>Tap to load goal details.</span></div>';
+    if (!match.goals.length) return '<div class="match-no-goals"><span>No goals were recorded for this match.</span></div>';
+    return '<div class="goal-timeline" aria-label="Goal timeline">' + match.goals.map(goal => {
+        const isHomeGoal = goal.team?.id === match.homeTeam?.id;
+        const minute = goal.injuryTime ? goal.minute + "+" + goal.injuryTime + "'" : goal.minute + "'";
+        const type = goal.type === "OWN_GOAL" ? "Own goal" : goal.type === "PENALTY" ? "Penalty" : "";
+        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + (goal.scorer?.name || "Unknown scorer") + '</span>' + (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') + (type ? '<span class="goal-type">' + type + '</span>' : '') + '</div></div>';
+    }).join("") + '</div>';
+}
+
+function closeExpandedMatch(exceptMatch = null) {
+    document.querySelectorAll(".match-expandable.expanded").forEach(match => {
+        if (match === exceptMatch) return;
+        match.classList.remove("expanded");
+        match.setAttribute("aria-expanded", "false");
+        const details = match.parentElement?.querySelector(".match-details");
+        if (details) details.setAttribute("aria-hidden", "true");
+    });
+}
+
+async function toggleMatch(matchElement) {
+    const isExpanded = matchElement.classList.contains("expanded");
+    closeExpandedMatch(matchElement);
+    matchElement.classList.toggle("expanded", !isExpanded);
+    matchElement.setAttribute("aria-expanded", String(!isExpanded));
+    const details = matchElement.parentElement?.querySelector(".match-details");
+    if (details) details.setAttribute("aria-hidden", String(isExpanded));
+    if (isExpanded) return;
+    const match = allMatches.find(item => String(item.id) === String(matchElement.dataset.matchId));
+    if (!match || Array.isArray(match.goals)) return;
+    const inner = details?.querySelector(".match-details-inner");
+    if (inner) inner.innerHTML = '<div class="match-no-goals"><span>Loading goal details…</span></div>';
+    try {
+        await NoSpoilersAPI.loadGoals(match.id, match);
+        if (matchElement.classList.contains("expanded") && inner) inner.innerHTML = createGoalTimeline(match);
+    } catch (error) {
+        console.error("Unable to load goal events:", error);
+        if (inner && matchElement.classList.contains("expanded")) inner.innerHTML = '<div class="match-no-goals"><span>Goal details are temporarily unavailable. Tap to close and reopen to retry.</span></div>';
+    }
+}
+
+document.addEventListener("click", event => {
+    const match = event.target.closest(".match-expandable");
+    if (match) toggleMatch(match);
+});
+document.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const match = event.target.closest(".match-expandable");
+    if (!match) return;
+    event.preventDefault();
+    toggleMatch(match);
+})
 
 function renderTeamMatches(teamId) {
     const matches = allMatches.filter(match =>
@@ -226,14 +265,7 @@ function renderTeamMatches(teamId) {
 
 async function loadMatches() {
     try {
-        const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        allMatches = data.matches || [];
+        allMatches = await NoSpoilersAPI.loadMatches();
 
         buildSelector();
         showSelectedTeam();

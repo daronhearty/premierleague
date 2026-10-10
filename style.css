@@ -1886,3 +1886,17 @@ footer p + p::before {
         transition: none;
     }
 }
+
+
+/* Goal assists from Big Balls Data */
+.goal-assist {
+    color: #6b7280;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .goal-assist {
+        font-size: 10px;
+    }
+}
