@@ -157,64 +157,100 @@
         try { return decodeURIComponent(escape(value)); } catch { return value; }
     }
 
+    function normalizeGoalEvent(event) {
+        const team = getTeam(event?.team);
+        const rawMinute = event?.elapsed ?? event?.minute;
+        const minute = rawMinute === null || rawMinute === undefined || rawMinute === "" ? null : Number(rawMinute);
+        const rawExtra = event?.elapsed_extra;
+        const injuryTime = rawExtra === null || rawExtra === undefined || rawExtra === "" ? null : Number(rawExtra);
+        const detail = String(event?.event_detail || "").toLowerCase();
+        const scorerName = fixMojibake(event?.player_name || event?.player?.name || event?.scorer_name || "");
+        return {
+            eventId: event?.id ?? event?.event_id ?? event?.incident_id ?? null,
+            period: event?.period ?? event?.period_name ?? null,
+            minute: Number.isFinite(minute) ? minute : null,
+            injuryTime: Number.isFinite(injuryTime) ? injuryTime : null,
+            scorer: { name: scorerName || "Unknown scorer" },
+            assist: fixMojibake(event?.assist_name || event?.assist?.name || ""),
+            team,
+            type: detail.includes("own goal") ? "OWN_GOAL" : detail.includes("penalty") ? "PENALTY" : "REGULAR",
+            eventDetail: event?.event_detail || ""
+        };
+    }
+
+    function goalSortValue(goal) {
+        return (Number(goal.minute ?? -1) * 100) + Number(goal.injuryTime ?? 0);
+    }
+
+    function deduplicateGoals(goals) {
+        const seenIds = new Set();
+        const seenSignatures = new Set();
+        return goals.filter(goal => {
+            if (goal.eventId !== null && goal.eventId !== undefined) {
+                const id = String(goal.eventId);
+                if (seenIds.has(id)) return false;
+                seenIds.add(id);
+            }
+            // Exact matches only: two real goals can occur close together.
+            const signature = [
+                goal.minute ?? "unknown-minute", goal.injuryTime ?? "", goal.period ?? "",
+                goal.team?.id ?? goal.team?.name ?? "",
+                String(goal.scorer?.name || "").trim().toLowerCase(),
+                goal.type, String(goal.eventDetail || "").trim().toLowerCase(),
+                String(goal.assist || "").trim().toLowerCase()
+            ].join("|");
+            if (seenSignatures.has(signature)) return false;
+            seenSignatures.add(signature);
+            return true;
+        });
+    }
+
     async function loadGoals(matchId, match) {
         if (!matchId) return [];
-        if (goalCache.has(matchId)) return goalCache.get(matchId);
+        const cacheKey = String(matchId);
+        if (goalCache.has(cacheKey)) return goalCache.get(cacheKey);
         const promise = request(WORKER + "?endpoint=bigballs-events&match_id=" + encodeURIComponent(matchId))
             .then(json => {
                 const events = Array.isArray(json?.data) ? json.data : [];
-                return events.filter(event => String(event?.event_type || "").toLowerCase() === "goal")
-                    .map(event => {
-                        const team = getTeam(event.team);
-                        const elapsed = Number(event.elapsed ?? event.minute ?? 0);
-                        const extra = event.elapsed_extra === null || event.elapsed_extra === undefined ? null : Number(event.elapsed_extra);
-                        const detail = String(event.event_detail || "").toLowerCase();
-                        return {
-                            minute: elapsed,
-                            injuryTime: extra,
-                            scorer: { name: fixMojibake(event.player_name) || "Unknown scorer" },
-                            assist: fixMojibake(event.assist_name || ""),
-                            team,
-                            type: detail.includes("own goal") ? "OWN_GOAL" : detail.includes("penalty") ? "PENALTY" : "REGULAR",
-                            eventDetail: event.event_detail || ""
-                        };
-                    })
-                    // Providers can return duplicate records for one goal:
-                    // sometimes one has no scorer, and sometimes one is marked
-                    // as an own goal while another names a scorer at the same
-                    // minute for the same team. Prefer the own-goal record in
-                    // that second case, and prefer named scorers over unknowns.
-                    .filter((goal, _index, goals) => {
-                        const sameTeamAndTime = other =>
-                            other !== goal &&
-                            other.minute === goal.minute &&
-                            other.injuryTime === goal.injuryTime &&
-                            other.team?.id != null &&
-                            String(other.team.id) === String(goal.team?.id);
-                        const isUnknown = !goal.scorer?.name || goal.scorer.name === "Unknown scorer";
-                        if (isUnknown) {
-                            return !goals.some(other =>
-                                sameTeamAndTime(other) &&
-                                other.scorer?.name &&
-                                other.scorer.name !== "Unknown scorer"
-                            );
+                let goals = events
+                    .filter(event => String(event?.event_type || "").trim().toLowerCase() === "goal")
+                    .map(normalizeGoalEvent)
+                    .filter(goal => goal.minute !== null);
+                if (match?.homeTeam?.id != null && match?.awayTeam?.id != null) {
+                    goals = goals.filter(goal => {
+                        if (goal.team?.id == null) return true;
+                        const id = String(goal.team.id);
+                        return id === String(match.homeTeam.id) || id === String(match.awayTeam.id);
+                    });
+                }
+                goals = deduplicateGoals(goals).sort((a, b) => goalSortValue(b) - goalSortValue(a));
+                // Preserve events even when they disagree with the score; log the
+                // discrepancy instead of hiding a potentially legitimate goal.
+                if (match?.status === "FINISHED") {
+                    const homeScore = Number(match.score?.fullTime?.home);
+                    const awayScore = Number(match.score?.fullTime?.away);
+                    if (Number.isFinite(homeScore) && Number.isFinite(awayScore)) {
+                        const homeGoals = goals.filter(goal => String(goal.team?.id) === String(match.homeTeam?.id)).length;
+                        const awayGoals = goals.filter(goal => String(goal.team?.id) === String(match.awayTeam?.id)).length;
+                        if (homeGoals !== homeScore || awayGoals !== awayScore) {
+                            console.warn("Goal event/score mismatch", {
+                                matchId: cacheKey,
+                                fixture: match.homeTeam?.name + " vs " + match.awayTeam?.name,
+                                score: { home: homeScore, away: awayScore },
+                                eventCounts: { home: homeGoals, away: awayGoals }, goals
+                            });
                         }
-                        if (goal.type !== "OWN_GOAL") {
-                            return !goals.some(other =>
-                                sameTeamAndTime(other) && other.type === "OWN_GOAL"
-                            );
-                        }
-                        return true;
-                    })
-                    .sort((a, b) => (a.minute + (a.injuryTime || 0) / 100) - (b.minute + (b.injuryTime || 0) / 100));
+                    }
+                }
+                return goals;
             });
-        goalCache.set(matchId, promise);
+        goalCache.set(cacheKey, promise);
         try {
             const goals = await promise;
             if (match) match.goals = goals;
             return goals;
         } catch (error) {
-            goalCache.delete(matchId);
+            goalCache.delete(cacheKey);
             throw error;
         }
     }
