@@ -6,7 +6,6 @@ const TEAM_BADGES = [
     { id: 1044, name: "Bournemouth", crest: "https://crests.football-data.org/1044.png" },
     { id: 402, name: "Brentford", crest: "https://crests.football-data.org/402.png" },
     { id: 397, name: "Brighton", crest: "https://crests.football-data.org/397.png" },
-    { id: 328, name: "Burnley", crest: "https://crests.football-data.org/328.png" },
     { id: 61, name: "Chelsea", crest: "https://crests.football-data.org/61.png" },
     { id: 354, name: "Crystal Palace", crest: "https://crests.football-data.org/354.png" },
     { id: 62, name: "Everton", crest: "https://crests.football-data.org/62.png" },
@@ -19,8 +18,9 @@ const TEAM_BADGES = [
     { id: 351, name: "Nottingham Forest", crest: "https://crests.football-data.org/351.png" },
     { id: 71, name: "Sunderland", crest: "https://crests.football-data.org/71.png" },
     { id: 73, name: "Tottenham Hotspur", crest: "https://crests.football-data.org/73.png" },
-    { id: 563, name: "West Ham United", crest: "https://crests.football-data.org/563.png" },
-    { id: 76, name: "Wolverhampton Wanderers", crest: "https://crests.football-data.org/76.png" }
+    { id: 349, name: "Ipswich Town", crest: "https://api.bigballsdata.com/v1/assets/aA_ZJyJSavLBDZxcDgEJn4pNqwqWXiLR8aVMohPMeiWQUVq32eLLIrC4tqmG_PgpiNd-xJApwKaUaGBdHAlZESC8aJY" },
+    { id: 322, name: "Hull City", crest: "https://api.bigballsdata.com/v1/assets/JnNFfB1nlbrq18pKBXkLj9WHSSgocLwJx__YXlUiLUz_j8k28a4dX4aoWPRhBVyc1vscXn6v0uFJIGFDtgSWEhrqQZ7nxRlYpTRlYmKaqLc" },
+    { id: 1076, name: "Coventry City", crest: "https://api.bigballsdata.com/v1/assets/o32rgc66eOVAOmNYd5z-QEaNlmlvNYqOIlWFHwTilkJSyFc14TCHbmXgq3MV2VQFhJFSe7LQy78Hiv3nKD9ZUcOInqP8" }
 ];
 
 let allTeams = [];
