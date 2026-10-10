@@ -2128,3 +2128,41 @@ footer p + p::before {
         font-size: 11px;
     }
 }
+
+
+/* =====================================================
+   DATA REFRESH CONTROL
+   ===================================================== */
+.data-refresh-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 20px 0;
+}
+.refresh-data-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: #37003c;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s ease, transform .2s ease;
+}
+.refresh-data-button:hover:not(:disabled) { transform: translateY(-1px); }
+.refresh-data-button:disabled { opacity: .7; cursor: wait; }
+.refresh-data-button.is-refreshing span { display: inline-block; animation: data-refresh-spin .8s linear infinite; }
+.refresh-status { color: #6b7280; font-size: .85rem; text-align: center; }
+@keyframes data-refresh-spin { to { transform: rotate(360deg); } }
+@media (max-width: 480px) {
+    .data-refresh-bar { padding-left: 12px; padding-right: 12px; }
+    .refresh-status { flex-basis: 100%; }
+}
