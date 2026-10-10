@@ -2042,3 +2042,89 @@ footer p + p::before {
         font-size: 10px;
     }
 }
+
+
+/* Mobile timeline: preserve home/away sides without a connecting line */
+@media (max-width: 600px) {
+    .goal-timeline::before {
+        display: none;
+    }
+
+    .goal-event {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        min-height: 34px;
+    }
+
+    .goal-event::before {
+        left: 50%;
+    }
+
+    .home-goal .goal-event-content {
+        grid-column: 1;
+        justify-content: flex-end;
+        text-align: right;
+        padding: 2px 14px 2px 0;
+    }
+
+    .away-goal .goal-event-content {
+        grid-column: 2;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 2px 0 2px 14px;
+    }
+
+    .goal-team-label {
+        display: none;
+    }
+
+    .goal-event-content {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 4px;
+        font-size: 12px;
+    }
+
+    .goal-minute,
+    .goal-icon {
+        flex-shrink: 0;
+    }
+
+    .goal-scorer {
+        overflow-wrap: anywhere;
+    }
+
+    .goal-assist {
+        flex-basis: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 10px;
+    }
+
+    .home-goal .goal-assist {
+        text-align: right;
+    }
+
+    .away-goal .goal-assist {
+        text-align: left;
+    }
+
+    .goal-type {
+        display: inline;
+        white-space: normal;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .home-goal .goal-event-content {
+        padding-right: 10px;
+    }
+
+    .away-goal .goal-event-content {
+        padding-left: 10px;
+    }
+
+    .goal-event-content {
+        font-size: 11px;
+    }
+}
