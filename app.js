@@ -143,8 +143,8 @@ function createGoalTimeline(match) {
 
 function createMatchCard(match) {
 
-    const homeTeam = match.homeTeam?.shortName || match.homeTeam?.name || "Home";
-    const awayTeam = match.awayTeam?.shortName || match.awayTeam?.name || "Away";
+    const homeTeam = escapeHTML(match.homeTeam?.shortName || match.homeTeam?.name || "Home");
+    const awayTeam = escapeHTML(match.awayTeam?.shortName || match.awayTeam?.name || "Away");
 
     const homeCrest = match.homeTeam?.crest || "";
     const awayCrest = match.awayTeam?.crest || "";
