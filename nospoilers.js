@@ -591,6 +591,7 @@ teamSelect.addEventListener(
         updateTeamSelector();
         updateBadgePicker();
         updatePage();
+        return true;
 
     }
 );
@@ -600,11 +601,11 @@ teamSelect.addEventListener(
     Load Premier League matches
 */
 
-async function loadMatches() {
+async function loadMatches(forceRefresh = false) {
 
     try {
 
-        allMatches = await NoSpoilersAPI.loadMatches();
+        allMatches = await NoSpoilersAPI.loadMatches({ forceRefresh });
 
 
         /*
@@ -636,6 +637,7 @@ async function loadMatches() {
             "latest-results"
         ).innerHTML =
             '<p class="loading">Unable to load results.</p>';
+        return false;
 
     }
 
@@ -643,7 +645,29 @@ async function loadMatches() {
 
 
 /*
-    Start
+    Refresh data
 */
+const refreshButton = document.getElementById("refresh-data");
+const refreshStatus = document.getElementById("refresh-status");
+
+if (refreshButton) {
+    refreshButton.addEventListener("click", async () => {
+        if (refreshButton.disabled) return;
+        refreshButton.disabled = true;
+        refreshButton.classList.add("is-refreshing");
+        refreshButton.innerHTML = '<span aria-hidden="true">↻</span> Refreshing…';
+        if (refreshStatus) refreshStatus.textContent = "Fetching the latest match data…";
+        try {
+            const refreshed = await loadMatches(true);
+            if (refreshStatus) refreshStatus.textContent = refreshed ? "Data refreshed just now." : "Refresh failed. Please try again shortly.";
+        } catch (error) {
+            if (refreshStatus) refreshStatus.textContent = "Refresh failed. Please try again shortly.";
+        } finally {
+            refreshButton.disabled = false;
+            refreshButton.classList.remove("is-refreshing");
+            refreshButton.innerHTML = '<span aria-hidden="true">↻</span> Refresh data';
+        }
+    });
+}
 
 loadMatches();
