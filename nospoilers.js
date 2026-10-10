@@ -1,7 +1,3 @@
-const API_URL =
-    "https://premier-league-api.daronhearty.workers.dev/?endpoint=competitions/PL/matches";
-
-
 let allMatches = [];
 
 const TEAM_BADGES = [
@@ -608,25 +604,7 @@ async function loadMatches() {
 
     try {
 
-        const response =
-            await fetch(API_URL);
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `API error: ${response.status}`
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        allMatches =
-            data.matches || [];
+        allMatches = await NoSpoilersAPI.loadMatches();
 
 
         /*
