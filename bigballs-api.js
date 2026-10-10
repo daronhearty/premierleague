@@ -109,8 +109,13 @@
         return json;
     }
 
-    async function loadMatches() {
+    async function loadMatches(options = {}) {
+        const forceRefresh = options === true || options?.forceRefresh === true;
         const cacheKey = "bigballs-all-statuses";
+        if (forceRefresh) {
+            matchCache.clear();
+            goalCache.clear();
+        }
         if (matchCache.has(cacheKey)) return matchCache.get(cacheKey);
 
         const promise = (async () => {
