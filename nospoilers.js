@@ -600,11 +600,11 @@ teamSelect.addEventListener(
     Load Premier League matches
 */
 
-async function loadMatches() {
+async function loadMatches(forceRefresh = false) {
 
     try {
 
-        allMatches = await NoSpoilersAPI.loadMatches();
+        allMatches = await NoSpoilersAPI.loadMatches({ forceRefresh });
 
 
         /*
@@ -645,5 +645,28 @@ async function loadMatches() {
 /*
     Start
 */
+
+const refreshButton = document.getElementById("refresh-data");
+const refreshStatus = document.getElementById("refresh-status");
+
+if (refreshButton) {
+    refreshButton.addEventListener("click", async () => {
+        if (refreshButton.disabled) return;
+        refreshButton.disabled = true;
+        refreshButton.classList.add("is-refreshing");
+        refreshButton.innerHTML = '<span aria-hidden="true">↻</span> Refreshing…';
+        if (refreshStatus) refreshStatus.textContent = "Fetching the latest match data…";
+        try {
+            await loadMatches(true);
+            if (refreshStatus) refreshStatus.textContent = "Data refreshed just now.";
+        } catch (error) {
+            if (refreshStatus) refreshStatus.textContent = "Refresh failed. Please try again shortly.";
+        } finally {
+            refreshButton.disabled = false;
+            refreshButton.classList.remove("is-refreshing");
+            refreshButton.innerHTML = '<span aria-hidden="true">↻</span> Refresh data';
+        }
+    });
+}
 
 loadMatches();
