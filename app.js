@@ -1,5 +1,4 @@
-const API_URL =
-    "https://premier-league-api.daronhearty.workers.dev/?endpoint=competitions/PL/matches";
+let allMatches = [];
 
 
 // -----------------------------
@@ -10,15 +9,8 @@ async function loadMatches() {
 
     try {
 
-        const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        const matches = data.matches || [];
+        const matches = await NoSpoilersAPI.loadMatches();
+        allMatches = matches;
 
         displayLiveMatches(matches);
         displayTodaysMatches(matches);
