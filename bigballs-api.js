@@ -158,7 +158,7 @@
     }
 
     function normalizeGoalEvent(event) {
-        const team = getTeam(event?.team);
+        const team = getTeam(event?.team || event?.team_name || event?.teamName);
         const rawMinute = event?.elapsed ?? event?.minute;
         const minute = rawMinute === null || rawMinute === undefined || rawMinute === "" ? null : Number(rawMinute);
         const rawExtra = event?.elapsed_extra;
@@ -329,11 +329,21 @@
                     .filter(event => String(event?.event_type || "").trim().toLowerCase() === "goal")
                     .map(normalizeGoalEvent)
                     .filter(goal => goal.minute !== null);
-                if (match?.homeTeam?.id != null && match?.awayTeam?.id != null) {
+                if (match?.homeTeam?.name && match?.awayTeam?.name) {
+                    // Provider team IDs are not necessarily in the same ID space
+                    // as the fixture feed. An unrelated provider ID can numerically
+                    // collide with a local team ID, so validate the team name too.
+                    // If the event's team cannot be identified, omit it rather than
+                    // risk showing another fixture's goals in this timeline.
+                    const fixtureTeamNames = new Set([
+                        cleanName(match.homeTeam.name),
+                        cleanName(match.awayTeam.name)
+                    ]);
                     goals = goals.filter(goal => {
-                        if (goal.team?.id == null) return true;
-                        const id = String(goal.team.id);
-                        return id === String(match.homeTeam.id) || id === String(match.awayTeam.id);
+                        const eventTeamName = cleanName(goal.team?.name);
+                        return eventTeamName !== "" &&
+                            eventTeamName !== "unknown" &&
+                            fixtureTeamNames.has(eventTeamName);
                     });
                 }
                 goals = deduplicateGoals(goals);
