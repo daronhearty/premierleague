@@ -46,8 +46,20 @@
         const name = typeof value === "string" ? value : value?.name || value?.short_name || value?.shortName || "";
         const cleaned = cleanName(name);
         const team = TEAMS.find(item => item.aliases.some(alias => cleanName(alias) === cleaned));
-        if (team) return { id: team.id, name: team.name, shortName: team.name, crest: team.crest };
-        return { id: null, name: name || "Unknown", shortName: name || "Unknown", crest: value?.logo_url || value?.crest || "" };
+        if (team) {
+            return {
+                id: team.id,
+                name: team.name,
+                shortName: typeof value === "object" && value?.short_name ? value.short_name : team.name,
+                crest: (typeof value === "object" && (value?.logo_url || value?.crest)) || team.crest
+            };
+        }
+        return {
+            id: typeof value === "object" ? value?.id ?? null : null,
+            name: name || "Unknown",
+            shortName: typeof value === "object" ? value?.short_name || name || "Unknown" : name || "Unknown",
+            crest: typeof value === "object" ? value?.logo_url || value?.crest || "" : ""
+        };
     }
 
     function getScore(raw, side) {
@@ -98,14 +110,41 @@
     }
 
     async function loadMatches() {
-        const url = WORKER + "?endpoint=bigballs-test&limit=100";
-        if (matchCache.has(url)) return matchCache.get(url);
-        const promise = request(url).then(json => {
-            const rows = Array.isArray(json?.data) ? json.data : Array.isArray(json?.matches) ? json.matches : [];
-            return rows.map(normalizeMatch).filter(match => match.utcDate && match.homeTeam.name !== "Unknown" && match.awayTeam.name !== "Unknown");
-        });
-        matchCache.set(url, promise);
-        try { return await promise; } catch (error) { matchCache.delete(url); throw error; }
+        const cacheKey = "bigballs-all-statuses";
+        if (matchCache.has(cacheKey)) return matchCache.get(cacheKey);
+
+        const promise = (async () => {
+            // Request each status explicitly so live, completed and upcoming
+            // fixtures are all available to the different homepage sections.
+            const statuses = ["live", "finished", "scheduled"];
+            const responses = await Promise.all(statuses.map(status =>
+                request(WORKER + "?endpoint=bigballs-test&limit=100&status=" + encodeURIComponent(status))
+                    .catch(error => {
+                        // Some API deployments may not support a status value;
+                        // retain successful status feeds rather than failing all pages.
+                        console.warn("Big Balls status feed unavailable:", status, error);
+                        return null;
+                    })
+            ));
+
+            const byId = new Map();
+            for (const json of responses) {
+                const rows = Array.isArray(json?.data) ? json.data : Array.isArray(json?.matches) ? json.matches : [];
+                for (const raw of rows) {
+                    const match = normalizeMatch(raw);
+                    if (match.id && match.utcDate && match.homeTeam.name !== "Unknown" && match.awayTeam.name !== "Unknown") {
+                        byId.set(String(match.id), match);
+                    }
+                }
+            }
+
+            return Array.from(byId.values()).sort((a, b) =>
+                new Date(a.utcDate).getTime() - new Date(b.utcDate).getTime()
+            );
+        })();
+
+        matchCache.set(cacheKey, promise);
+        try { return await promise; } catch (error) { matchCache.delete(cacheKey); throw error; }
     }
 
     function fixMojibake(value) {
