@@ -270,41 +270,29 @@ function getScorerName(goal) {
 }
 
 function getMatchGoals(match) {
-    if (!Array.isArray(match.goals)) return [];
-    return [...match.goals].sort((a, b) => {
-        const aMinute = Number(a?.minute ?? 0);
-        const bMinute = Number(b?.minute ?? 0);
-        const aInjury = Number(a?.injuryTime ?? 0);
-        const bInjury = Number(b?.injuryTime ?? 0);
-        return (aMinute + aInjury / 100) - (bMinute + bInjury / 100);
-    });
+    if (!Array.isArray(match.goals)) return null;
+    return [...match.goals].sort((a, b) =>
+        (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100) -
+        (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100)
+    );
 }
 
 function createGoalTimeline(match) {
     const goals = getMatchGoals(match);
+    if (goals === null) return '<div class="match-no-goals"><span>Tap to load goal details.</span></div>';
     if (goals.length === 0) {
-        const message = match.status === "FINISHED"
-            ? "No goals were scored in this match."
-            : "No goals have been scored yet.";
+        const message = match.status === "FINISHED" ? "No goals were recorded for this match." : "No goals have been scored yet.";
         return '<div class="match-no-goals"><span>' + message + '</span></div>';
     }
-    return '<div class="goal-timeline" aria-label="Goal timeline">' +
-        goals.map(goal => {
-            const scorer = getScorerName(goal);
-            const minute = formatGoalMinute(goal);
-            const teamId = goal?.team?.id;
-            const homeId = match.homeTeam?.id;
-            const isHomeGoal = teamId !== undefined && teamId === homeId;
-            const goalType = goal?.type === "OWN_GOAL" ? "Own goal" : goal?.type === "PENALTY" ? "Penalty" : "";
-            return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '">' +
-                '<div class="goal-event-content">' +
-                '<span class="goal-minute">' + minute + '</span>' +
-                '<span class="goal-icon" aria-hidden="true">⚽</span>' +
-                '<span class="goal-scorer">' + scorer + '</span>' +
-                (goalType ? '<span class="goal-type">' + goalType + '</span>' : "") +
-                '</div></div>';
-        }).join("") +
-        '</div>';
+    return '<div class="goal-timeline" aria-label="Goal timeline">' + goals.map(goal => {
+        const scorer = getScorerName(goal);
+        const minute = formatGoalMinute(goal);
+        const isHomeGoal = goal?.team?.id === match.homeTeam?.id;
+        const goalType = goal?.type === "OWN_GOAL" ? "Own goal" : goal?.type === "PENALTY" ? "Penalty" : "";
+        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + scorer + '</span>' +
+            (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') +
+            (goalType ? '<span class="goal-type">' + goalType + '</span>' : '') + '</div></div>';
+    }).join("") + '</div>';
 }
 
 /*
@@ -351,13 +339,25 @@ function closeExpandedMatch(exceptMatch = null) {
     });
 }
 
-function toggleMatch(matchElement) {
+async function toggleMatch(matchElement) {
     const isExpanded = matchElement.classList.contains("expanded");
     closeExpandedMatch(matchElement);
     matchElement.classList.toggle("expanded", !isExpanded);
     matchElement.setAttribute("aria-expanded", String(!isExpanded));
     const details = matchElement.parentElement?.querySelector(".match-details");
     if (details) details.setAttribute("aria-hidden", String(isExpanded));
+    if (isExpanded) return;
+    const match = allMatches.find(item => String(item.id) === String(matchElement.dataset.matchId));
+    if (!match || Array.isArray(match.goals)) return;
+    const inner = details?.querySelector(".match-details-inner");
+    if (inner) inner.innerHTML = '<div class="match-no-goals"><span>Loading goal details…</span></div>';
+    try {
+        await NoSpoilersAPI.loadGoals(match.id, match);
+        if (matchElement.classList.contains("expanded") && inner) inner.innerHTML = createGoalTimeline(match);
+    } catch (error) {
+        console.error("Unable to load goal events:", error);
+        if (inner && matchElement.classList.contains("expanded")) inner.innerHTML = '<div class="match-no-goals"><span>Goal details are temporarily unavailable. Tap to close and reopen to retry.</span></div>';
+    }
 }
 
 document.addEventListener("click", event => {
