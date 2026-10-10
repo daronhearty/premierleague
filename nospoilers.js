@@ -272,8 +272,8 @@ function getScorerName(goal) {
 function getMatchGoals(match) {
     if (!Array.isArray(match.goals)) return null;
     return [...match.goals].sort((a, b) =>
-        (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100) -
-        (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100)
+        (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100) -
+        (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100)
     );
 }
 
