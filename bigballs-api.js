@@ -174,22 +174,32 @@
                             eventDetail: event.event_detail || ""
                         };
                     })
-                    // Some provider responses contain a second, incomplete record
-                    // for a goal alongside the properly attributed event. If an
-                    // unknown-scorer record matches a known scorer at the same
-                    // minute for the same team, keep the useful record only.
+                    // Providers can return duplicate records for one goal:
+                    // sometimes one has no scorer, and sometimes one is marked
+                    // as an own goal while another names a scorer at the same
+                    // minute for the same team. Prefer the own-goal record in
+                    // that second case, and prefer named scorers over unknowns.
                     .filter((goal, _index, goals) => {
-                        const isUnknown = !goal.scorer?.name || goal.scorer.name === "Unknown scorer";
-                        if (!isUnknown) return true;
-                        return !goals.some(other =>
+                        const sameTeamAndTime = other =>
                             other !== goal &&
-                            other.scorer?.name &&
-                            other.scorer.name !== "Unknown scorer" &&
                             other.minute === goal.minute &&
                             other.injuryTime === goal.injuryTime &&
                             other.team?.id != null &&
-                            String(other.team.id) === String(goal.team?.id)
-                        );
+                            String(other.team.id) === String(goal.team?.id);
+                        const isUnknown = !goal.scorer?.name || goal.scorer.name === "Unknown scorer";
+                        if (isUnknown) {
+                            return !goals.some(other =>
+                                sameTeamAndTime(other) &&
+                                other.scorer?.name &&
+                                other.scorer.name !== "Unknown scorer"
+                            );
+                        }
+                        if (goal.type !== "OWN_GOAL") {
+                            return !goals.some(other =>
+                                sameTeamAndTime(other) && other.type === "OWN_GOAL"
+                            );
+                        }
+                        return true;
                     })
                     .sort((a, b) => (a.minute + (a.injuryTime || 0) / 100) - (b.minute + (b.injuryTime || 0) / 100));
             });
