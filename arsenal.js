@@ -173,15 +173,36 @@ function createMatchCard(match) {
     `;
 }
 
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
 function createGoalTimeline(match) {
     if (!Array.isArray(match.goals)) return '<div class="match-no-goals"><span>Tap to load goal details.</span></div>';
     if (!match.goals.length) return '<div class="match-no-goals"><span>No goals were recorded for this match.</span></div>';
-    return '<div class="goal-timeline" aria-label="Goal timeline">' + match.goals.map(goal => {
-        const isHomeGoal = goal.team?.id === match.homeTeam?.id;
-        const minute = goal.injuryTime ? goal.minute + "+" + goal.injuryTime + "'" : goal.minute + "'";
+    const goals = [...match.goals].sort((a, b) =>
+        (Number(b.minute ?? -1) * 100 + Number(b.injuryTime ?? 0)) -
+        (Number(a.minute ?? -1) * 100 + Number(a.injuryTime ?? 0))
+    );
+    const homeScore = match.score?.fullTime?.home, awayScore = match.score?.fullTime?.away;
+    const scoreKnown = homeScore !== null && homeScore !== undefined && awayScore !== null && awayScore !== undefined;
+    const homeCount = goals.filter(goal => String(goal.team?.id) === String(match.homeTeam?.id)).length;
+    const awayCount = goals.filter(goal => String(goal.team?.id) === String(match.awayTeam?.id)).length;
+    const mismatch = match.status === "FINISHED" && scoreKnown &&
+        (homeCount !== Number(homeScore) || awayCount !== Number(awayScore));
+    const html = '<div class="goal-timeline" aria-label="Goal timeline">' + goals.map(goal => {
+        const teamId = goal.team?.id;
+        const isHomeGoal = teamId != null && String(teamId) === String(match.homeTeam?.id);
+        const isAwayGoal = teamId != null && String(teamId) === String(match.awayTeam?.id);
+        const sideClass = isHomeGoal ? "home-goal" : isAwayGoal ? "away-goal" : "unassigned-goal";
+        const minute = escapeHTML(goal.injuryTime ? goal.minute + "+" + goal.injuryTime + "'" : goal.minute + "'");
         const type = goal.type === "OWN_GOAL" ? "Own goal" : goal.type === "PENALTY" ? "Penalty" : "";
-        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + (goal.scorer?.name || "Unknown scorer") + '</span>' + (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') + (type ? '<span class="goal-type">' + type + '</span>' : '') + '</div></div>';
+        return '<div class="goal-event ' + sideClass + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + escapeHTML(goal.scorer?.name || "Unknown scorer") + '</span>' + (goal.assist ? '<span class="goal-assist">Assist: ' + escapeHTML(goal.assist) + '</span>' : '') + (type ? '<span class="goal-type">' + type + '</span>' : '') + '</div></div>';
     }).join("") + '</div>';
+    return html + (mismatch ? '<div class="match-no-goals goal-data-warning" role="status">Goal events do not currently match the final score. The event feed may contain duplicates or incomplete data.</div>' : '');
 }
 
 function closeExpandedMatch(exceptMatch = null) {
