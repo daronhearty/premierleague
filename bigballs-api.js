@@ -182,27 +182,140 @@
         return (Number(goal.minute ?? -1) * 100) + Number(goal.injuryTime ?? 0);
     }
 
+    function normalizedText(value) {
+        return String(value || "").trim().toLowerCase().replace(/\\s+/g, " ");
+    }
+
+    function exactGoalSignature(goal) {
+        return [
+            goal.minute ?? "unknown-minute",
+            goal.injuryTime ?? "",
+            goal.period ?? "",
+            goal.team?.id ?? goal.team?.name ?? "",
+            normalizedText(goal.scorer?.name),
+            goal.type,
+            normalizedText(goal.eventDetail),
+            normalizedText(goal.assist)
+        ].join("|");
+    }
+
     function deduplicateGoals(goals) {
         const seenIds = new Set();
         const seenSignatures = new Set();
         return goals.filter(goal => {
+            // Provider event IDs are the strongest duplicate signal.
             if (goal.eventId !== null && goal.eventId !== undefined) {
                 const id = String(goal.eventId);
                 if (seenIds.has(id)) return false;
                 seenIds.add(id);
             }
-            // Exact matches only: two real goals can occur close together.
-            const signature = [
-                goal.minute ?? "unknown-minute", goal.injuryTime ?? "", goal.period ?? "",
-                goal.team?.id ?? goal.team?.name ?? "",
-                String(goal.scorer?.name || "").trim().toLowerCase(),
-                goal.type, String(goal.eventDetail || "").trim().toLowerCase(),
-                String(goal.assist || "").trim().toLowerCase()
-            ].join("|");
+
+            // Exact duplicate payloads are safe to collapse. Minute alone is
+            // never sufficient: separate goals can happen in the same minute.
+            const signature = exactGoalSignature(goal);
             if (seenSignatures.has(signature)) return false;
             seenSignatures.add(signature);
             return true;
         });
+    }
+
+    function goalCompleteness(goal) {
+        return Number(goal.eventId !== null && goal.eventId !== undefined) * 8 +
+            Number(goal.scorer?.name && goal.scorer.name !== "Unknown scorer") * 4 +
+            Number(Boolean(goal.assist)) * 2 +
+            Number(Boolean(goal.period)) +
+            Number(Boolean(goal.eventDetail));
+    }
+
+    function likelySameGoal(a, b) {
+        if (a === b) return false;
+        if (a.team?.id == null || b.team?.id == null ||
+            String(a.team.id) !== String(b.team.id)) return false;
+
+        // Do not merge different named scorers or different goal types.
+        const aScorer = normalizedText(a.scorer?.name);
+        const bScorer = normalizedText(b.scorer?.name);
+        if (!aScorer || aScorer === "unknown scorer" || aScorer !== bScorer) return false;
+        if (a.type !== b.type) return false;
+
+        // Only consider events very close in match time, including injury time.
+        if (Math.abs(goalSortValue(a) - goalSortValue(b)) > 2) return false;
+
+        // Assist data strengthens the match, but missing assist data on one
+        // record should not prevent identifying a likely duplicate.
+        const aAssist = normalizedText(a.assist);
+        const bAssist = normalizedText(b.assist);
+        if (aAssist && bAssist && aAssist !== bAssist) return false;
+        return true;
+    }
+
+    function resolveLikelyDuplicatesAgainstScore(goals, match) {
+        if (match?.status !== "FINISHED") return goals;
+        const homeScore = Number(match.score?.fullTime?.home);
+        const awayScore = Number(match.score?.fullTime?.away);
+        if (!Number.isInteger(homeScore) || !Number.isInteger(awayScore)) return goals;
+
+        const expectedByTeam = new Map([
+            [String(match.homeTeam?.id), homeScore],
+            [String(match.awayTeam?.id), awayScore]
+        ]);
+        let resolved = [...goals];
+
+        for (const [teamId, expected] of expectedByTeam) {
+            let teamGoals = resolved.filter(goal => String(goal.team?.id) === teamId);
+            let excess = teamGoals.length - expected;
+            if (excess <= 0) continue;
+
+            // Only remove a record when there is a strong pair match and the
+            // team has more goal events than the official score. Never remove
+            // a goal merely to force the score to agree.
+            const candidates = [];
+            for (let i = 0; i < teamGoals.length; i++) {
+                for (let j = i + 1; j < teamGoals.length; j++) {
+                    const a = teamGoals[i], b = teamGoals[j];
+                    if (!likelySameGoal(a, b)) continue;
+                    const assistMatch = normalizedText(a.assist) &&
+                        normalizedText(a.assist) === normalizedText(b.assist);
+                    candidates.push({
+                        a, b,
+                        confidence: (assistMatch ? 3 : 0) +
+                            (a.eventId != null && b.eventId != null ? 1 : 0),
+                        difference: Math.abs(goalSortValue(a) - goalSortValue(b))
+                    });
+                }
+            }
+
+            candidates.sort((a, b) =>
+                b.confidence - a.confidence ||
+                a.difference - b.difference
+            );
+
+            const removed = new Set();
+            for (const candidate of candidates) {
+                if (excess <= 0) break;
+                if (removed.has(candidate.a) || removed.has(candidate.b)) continue;
+
+                // Keep the richer record. If equally complete, keep the earlier
+                // timestamp as the canonical event rather than inventing time.
+                const scoreA = goalCompleteness(candidate.a);
+                const scoreB = goalCompleteness(candidate.b);
+                const discard = scoreA === scoreB
+                    ? (goalSortValue(candidate.a) <= goalSortValue(candidate.b) ? candidate.b : candidate.a)
+                    : (scoreA > scoreB ? candidate.b : candidate.a);
+                removed.add(discard);
+                excess--;
+            }
+
+            if (removed.size) {
+                resolved = resolved.filter(goal => !removed.has(goal));
+                console.warn("Likely duplicate goal events removed after score check", {
+                    matchId: match.id,
+                    teamId,
+                    removedCount: removed.size
+                });
+            }
+        }
+        return resolved;
     }
 
     async function loadGoals(matchId, match) {
@@ -223,7 +336,9 @@
                         return id === String(match.homeTeam.id) || id === String(match.awayTeam.id);
                     });
                 }
-                goals = deduplicateGoals(goals).sort((a, b) => goalSortValue(b) - goalSortValue(a));
+                goals = deduplicateGoals(goals);
+                goals = resolveLikelyDuplicatesAgainstScore(goals, match)
+                    .sort((a, b) => goalSortValue(b) - goalSortValue(a));
                 // Preserve events even when they disagree with the score; log the
                 // discrepancy instead of hiding a potentially legitimate goal.
                 if (match?.status === "FINISHED") {
