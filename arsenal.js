@@ -114,8 +114,8 @@ function showSelectedTeam() {
 }
 
 function createFeatureMatch(match, isUpcoming = false) {
-    const homeName = getTeamName(match.homeTeam);
-    const awayName = getTeamName(match.awayTeam);
+    const homeName = escapeHTML(getTeamName(match.homeTeam));
+    const awayName = escapeHTML(getTeamName(match.awayTeam));
     const homeCrest = getTeamCrest(match.homeTeam);
     const awayCrest = getTeamCrest(match.awayTeam);
 
