@@ -156,34 +156,76 @@ function createMatchCard(match) {
     const awayName = getTeamName(match.awayTeam);
     const homeCrest = getTeamCrest(match.homeTeam);
     const awayCrest = getTeamCrest(match.awayTeam);
-
     const homeScore = match.score?.fullTime?.home;
     const awayScore = match.score?.fullTime?.away;
-
     const isFinished = match.status === "FINISHED";
-    const score = isFinished && homeScore !== null && awayScore !== null
-        ? `${homeScore} - ${awayScore}`
-        : "vs";
-
+    const score = isFinished && homeScore !== null && awayScore !== null ? `${homeScore} - ${awayScore}` : "vs";
+    const expandable = isFinished || ["IN_PLAY", "PAUSED"].includes(match.status);
     return `
-        <div class="match">
-            <div class="team home">
-                ${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}
-                <span>${homeName}</span>
+        <div class="match-wrapper${expandable ? " match-wrapper-expandable" : ""}">
+            <div class="match${expandable ? " match-expandable" : ""}" ${expandable ? `data-match-id="${match.id}" tabindex="0" role="button" aria-expanded="false" aria-label="Show goals for ${homeName} versus ${awayName}"` : ""}>
+                <div class="team home">${homeCrest ? `<img src="${homeCrest}" alt="" width="28" height="28">` : ""}<span>${homeName}</span></div>
+                <div class="score"><strong>${score}</strong><small>${formatDate(match.utcDate)}</small></div>
+                <div class="team away"><span>${awayName}</span>${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}</div>
             </div>
-
-            <div class="score">
-                <strong>${score}</strong>
-                <small>${formatDate(match.utcDate)}</small>
-            </div>
-
-            <div class="team away">
-                <span>${awayName}</span>
-                ${awayCrest ? `<img src="${awayCrest}" alt="" width="28" height="28">` : ""}
-            </div>
+            ${expandable ? `<div class="match-details" aria-hidden="true"><div class="match-details-inner">${createGoalTimeline(match)}</div></div>` : ""}
         </div>
     `;
 }
+
+function createGoalTimeline(match) {
+    if (!Array.isArray(match.goals)) return '<div class="match-no-goals"><span>Tap to load goal details.</span></div>';
+    if (!match.goals.length) return '<div class="match-no-goals"><span>No goals were recorded for this match.</span></div>';
+    return '<div class="goal-timeline" aria-label="Goal timeline">' + match.goals.map(goal => {
+        const isHomeGoal = goal.team?.id === match.homeTeam?.id;
+        const minute = goal.injuryTime ? goal.minute + "+" + goal.injuryTime + "'" : goal.minute + "'";
+        const type = goal.type === "OWN_GOAL" ? "Own goal" : goal.type === "PENALTY" ? "Penalty" : "";
+        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + (goal.scorer?.name || "Unknown scorer") + '</span>' + (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') + (type ? '<span class="goal-type">' + type + '</span>' : '') + '</div></div>';
+    }).join("") + '</div>';
+}
+
+function closeExpandedMatch(exceptMatch = null) {
+    document.querySelectorAll(".match-expandable.expanded").forEach(match => {
+        if (match === exceptMatch) return;
+        match.classList.remove("expanded");
+        match.setAttribute("aria-expanded", "false");
+        const details = match.parentElement?.querySelector(".match-details");
+        if (details) details.setAttribute("aria-hidden", "true");
+    });
+}
+
+async function toggleMatch(matchElement) {
+    const isExpanded = matchElement.classList.contains("expanded");
+    closeExpandedMatch(matchElement);
+    matchElement.classList.toggle("expanded", !isExpanded);
+    matchElement.setAttribute("aria-expanded", String(!isExpanded));
+    const details = matchElement.parentElement?.querySelector(".match-details");
+    if (details) details.setAttribute("aria-hidden", String(isExpanded));
+    if (isExpanded) return;
+    const match = allMatches.find(item => String(item.id) === String(matchElement.dataset.matchId));
+    if (!match || Array.isArray(match.goals)) return;
+    const inner = details?.querySelector(".match-details-inner");
+    if (inner) inner.innerHTML = '<div class="match-no-goals"><span>Loading goal details…</span></div>';
+    try {
+        await NoSpoilersAPI.loadGoals(match.id, match);
+        if (matchElement.classList.contains("expanded") && inner) inner.innerHTML = createGoalTimeline(match);
+    } catch (error) {
+        console.error("Unable to load goal events:", error);
+        if (inner && matchElement.classList.contains("expanded")) inner.innerHTML = '<div class="match-no-goals"><span>Goal details are temporarily unavailable. Tap to close and reopen to retry.</span></div>';
+    }
+}
+
+document.addEventListener("click", event => {
+    const match = event.target.closest(".match-expandable");
+    if (match) toggleMatch(match);
+});
+document.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const match = event.target.closest(".match-expandable");
+    if (!match) return;
+    event.preventDefault();
+    toggleMatch(match);
+})
 
 function renderTeamMatches(teamId) {
     const matches = allMatches.filter(match =>
