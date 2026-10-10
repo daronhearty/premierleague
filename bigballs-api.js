@@ -14,21 +14,21 @@
         { id: 1044, name: "Bournemouth", crest: "https://crests.football-data.org/1044.png", aliases: ["bournemouth", "afc bournemouth"] },
         { id: 402, name: "Brentford", crest: "https://crests.football-data.org/402.png", aliases: ["brentford", "brentford fc"] },
         { id: 397, name: "Brighton", crest: "https://crests.football-data.org/397.png", aliases: ["brighton", "brighton and hove albion", "brighton & hove albion"] },
-        { id: 328, name: "Burnley", crest: "https://crests.football-data.org/328.png", aliases: ["burnley", "burnley fc"] },
         { id: 61, name: "Chelsea", crest: "https://crests.football-data.org/61.png", aliases: ["chelsea", "chelsea fc"] },
         { id: 354, name: "Crystal Palace", crest: "https://crests.football-data.org/354.png", aliases: ["crystal palace", "crystal palace fc"] },
         { id: 62, name: "Everton", crest: "https://crests.football-data.org/62.png", aliases: ["everton", "everton fc"] },
         { id: 63, name: "Fulham", crest: "https://crests.football-data.org/63.png", aliases: ["fulham", "fulham fc"] },
         { id: 341, name: "Leeds United", crest: "https://crests.football-data.org/341.png", aliases: ["leeds", "leeds united", "leeds united fc"] },
+        { id: 349, name: "Ipswich Town", crest: "https://api.bigballsdata.com/v1/assets/aA_ZJyJSavLBDZxcDgEJn4pNqwqWXiLR8aVMohPMeiWQUVq32eLLIrC4tqmG_PgpiNd-xJApwKaUaGBdHAlZESC8aJY", aliases: ["ipswich", "ipswich town", "ipswich town fc"] },
+        { id: 322, name: "Hull City", crest: "https://api.bigballsdata.com/v1/assets/JnNFfB1nlbrq18pKBXkLj9WHSSgocLwJx__YXlUiLUz_j8k28a4dX4aoWPRhBVyc1vscXn6v0uFJIGFDtgSWEhrqQZ7nxRlYpTRlYmKaqLc", aliases: ["hull", "hull city", "hull city fc"] },
+        { id: 1076, name: "Coventry City", crest: "https://api.bigballsdata.com/v1/assets/o32rgc66eOVAOmNYd5z-QEaNlmlvNYqOIlWFHwTilkJSyFc14TCHbmXgq3MV2VQFhJFSe7LQy78Hiv3nKD9ZUcOInqP8", aliases: ["coventry", "coventry city", "coventry city fc"] },
         { id: 64, name: "Liverpool", crest: "https://crests.football-data.org/64.png", aliases: ["liverpool", "liverpool fc"] },
         { id: 65, name: "Manchester City", crest: "https://crests.football-data.org/65.png", aliases: ["manchester city", "man city", "manchester city fc"] },
         { id: 66, name: "Manchester United", crest: "https://crests.football-data.org/66.png", aliases: ["manchester united", "man united", "man utd", "manchester united fc"] },
         { id: 67, name: "Newcastle United", crest: "https://crests.football-data.org/67.png", aliases: ["newcastle", "newcastle united", "newcastle united fc"] },
         { id: 351, name: "Nottingham Forest", crest: "https://crests.football-data.org/351.png", aliases: ["nottingham forest", "forest", "nottingham forest fc"] },
         { id: 71, name: "Sunderland", crest: "https://crests.football-data.org/71.png", aliases: ["sunderland", "sunderland afc"] },
-        { id: 73, name: "Tottenham Hotspur", crest: "https://crests.football-data.org/73.png", aliases: ["tottenham", "tottenham hotspur", "spurs"] },
-        { id: 563, name: "West Ham United", crest: "https://crests.football-data.org/563.png", aliases: ["west ham", "west ham united", "west ham united fc"] },
-        { id: 76, name: "Wolverhampton Wanderers", crest: "https://crests.football-data.org/76.png", aliases: ["wolves", "wolverhampton", "wolverhampton wanderers"] }
+        { id: 73, name: "Tottenham Hotspur", crest: "https://crests.football-data.org/73.png", aliases: ["tottenham", "tottenham hotspur", "spurs"] }
     ];
 
     function cleanName(value) {
