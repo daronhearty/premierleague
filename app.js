@@ -114,11 +114,8 @@ function createGoalTimeline(match) {
         const scorer = getScorerName(goal);
         const minute = formatGoalMinute(goal);
         const isHomeGoal = goal?.team?.id === match.homeTeam?.id;
-        const goalTeam = isHomeGoal
-            ? (match.homeTeam?.shortName || match.homeTeam?.name || "Home")
-            : (match.awayTeam?.shortName || match.awayTeam?.name || "Away");
         const goalType = goal?.type === "OWN_GOAL" ? "Own goal" : goal?.type === "PENALTY" ? "Penalty" : "";
-        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + scorer + '</span><span class="goal-team-label">' + goalTeam + '</span>' +
+        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + scorer + '</span>' +
             (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') +
             (goalType ? '<span class="goal-type">' + goalType + '</span>' : '') + '</div></div>';
     }).join("") + '</div>';
