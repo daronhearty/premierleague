@@ -258,6 +258,13 @@ function formatDate(dateString) {
     Goal timeline helpers
 */
 
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+}
+
 function formatGoalMinute(goal) {
     const minute = goal?.minute;
     if (minute === null || minute === undefined) return "";
@@ -271,21 +278,10 @@ function getScorerName(goal) {
 
 function getMatchGoals(match) {
     if (!Array.isArray(match.goals)) return null;
-
-    // Some event feeds can include records for a different fixture. Only show
-    // goals explicitly attributed to one of the two teams in this match.
-    const homeId = match.homeTeam?.id;
-    const awayId = match.awayTeam?.id;
-    return match.goals
-        .filter(goal => {
-            const teamId = goal?.team?.id;
-            if (teamId === null || teamId === undefined) return false;
-            return String(teamId) === String(homeId) || String(teamId) === String(awayId);
-        })
-        .sort((a, b) =>
-            (Number(b.minute || 0) + Number(b.injuryTime || 0) / 100) -
-            (Number(a.minute || 0) + Number(a.injuryTime || 0) / 100)
-        );
+    return [...match.goals].sort((a, b) =>
+        (Number(b.minute ?? -1) * 100 + Number(b.injuryTime ?? 0)) -
+        (Number(a.minute ?? -1) * 100 + Number(a.injuryTime ?? 0))
+    );
 }
 
 function createGoalTimeline(match) {
@@ -295,15 +291,25 @@ function createGoalTimeline(match) {
         const message = match.status === "FINISHED" ? "No goals were recorded for this match." : "No goals have been scored yet.";
         return '<div class="match-no-goals"><span>' + message + '</span></div>';
     }
-    return '<div class="goal-timeline" aria-label="Goal timeline">' + goals.map(goal => {
-        const scorer = getScorerName(goal);
-        const minute = formatGoalMinute(goal);
-        const isHomeGoal = goal?.team?.id === match.homeTeam?.id;
+    const homeScore = match.score?.fullTime?.home, awayScore = match.score?.fullTime?.away;
+    const scoreKnown = homeScore !== null && homeScore !== undefined && awayScore !== null && awayScore !== undefined;
+    const homeCount = goals.filter(goal => String(goal.team?.id) === String(match.homeTeam?.id)).length;
+    const awayCount = goals.filter(goal => String(goal.team?.id) === String(match.awayTeam?.id)).length;
+    const mismatch = match.status === "FINISHED" && scoreKnown &&
+        (homeCount !== Number(homeScore) || awayCount !== Number(awayScore));
+    const html = '<div class="goal-timeline" aria-label="Goal timeline">' + goals.map(goal => {
+        const scorer = escapeHTML(goal?.scorer?.name || goal?.scorer?.shortName || goal?.player?.name || "Unknown scorer");
+        const minute = escapeHTML(formatGoalMinute(goal));
+        const teamId = goal?.team?.id;
+        const isHomeGoal = teamId != null && String(teamId) === String(match.homeTeam?.id);
+        const isAwayGoal = teamId != null && String(teamId) === String(match.awayTeam?.id);
+        const sideClass = isHomeGoal ? "home-goal" : isAwayGoal ? "away-goal" : "unassigned-goal";
         const goalType = goal?.type === "OWN_GOAL" ? "Own goal" : goal?.type === "PENALTY" ? "Penalty" : "";
-        return '<div class="goal-event ' + (isHomeGoal ? "home-goal" : "away-goal") + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + scorer + '</span>' +
-            (goal.assist ? '<span class="goal-assist">Assist: ' + goal.assist + '</span>' : '') +
+        return '<div class="goal-event ' + sideClass + '"><div class="goal-event-content"><span class="goal-minute">' + minute + '</span><span class="goal-icon" aria-hidden="true">⚽</span><span class="goal-scorer">' + scorer + '</span>' +
+            (goal.assist ? '<span class="goal-assist">Assist: ' + escapeHTML(goal.assist) + '</span>' : '') +
             (goalType ? '<span class="goal-type">' + goalType + '</span>' : '') + '</div></div>';
     }).join("") + '</div>';
+    return html + (mismatch ? '<div class="match-no-goals goal-data-warning" role="status">Goal events do not currently match the final score. The event feed may contain duplicates or incomplete data.</div>' : '');
 }
 
 /*
@@ -311,8 +317,8 @@ function createGoalTimeline(match) {
 */
 
 function createMatchCard(match) {
-    const homeTeam = match.homeTeam?.shortName || match.homeTeam?.name || "Home";
-    const awayTeam = match.awayTeam?.shortName || match.awayTeam?.name || "Away";
+    const homeTeam = escapeHTML(match.homeTeam?.shortName || match.homeTeam?.name || "Home");
+    const awayTeam = escapeHTML(match.awayTeam?.shortName || match.awayTeam?.name || "Away");
     const homeCrest = match.homeTeam?.crest || "";
     const awayCrest = match.awayTeam?.crest || "";
     const homeScore = match.score?.fullTime?.home;
