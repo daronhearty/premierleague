@@ -183,7 +183,7 @@
     }
 
     function normalizedText(value) {
-        return String(value || "").trim().toLowerCase().replace(/\\s+/g, " ");
+        return String(value || "").trim().toLowerCase().replace(/\s+/g, " ");
     }
 
     function exactGoalSignature(goal) {
