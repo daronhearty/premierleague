@@ -174,6 +174,23 @@
                             eventDetail: event.event_detail || ""
                         };
                     })
+                    // Some provider responses contain a second, incomplete record
+                    // for a goal alongside the properly attributed event. If an
+                    // unknown-scorer record matches a known scorer at the same
+                    // minute for the same team, keep the useful record only.
+                    .filter((goal, _index, goals) => {
+                        const isUnknown = !goal.scorer?.name || goal.scorer.name === "Unknown scorer";
+                        if (!isUnknown) return true;
+                        return !goals.some(other =>
+                            other !== goal &&
+                            other.scorer?.name &&
+                            other.scorer.name !== "Unknown scorer" &&
+                            other.minute === goal.minute &&
+                            other.injuryTime === goal.injuryTime &&
+                            other.team?.id != null &&
+                            String(other.team.id) === String(goal.team?.id)
+                        );
+                    })
                     .sort((a, b) => (a.minute + (a.injuryTime || 0) / 100) - (b.minute + (b.injuryTime || 0) / 100));
             });
         goalCache.set(matchId, promise);
